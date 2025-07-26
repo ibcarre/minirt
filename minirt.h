@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/07/26 22:33:14 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/07/27 00:44:57 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include "minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <math.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include "get_next_line.h"
 
 typedef struct s_vector3
@@ -87,5 +91,8 @@ typedef struct s_obj
 
 void	print_obj_param(t_obj *object);
 t_obj	*parsing(int fd);
+void	free_objs(t_obj *first);
+char	*skip_spaces(char *line);
+char	*get_word(char *line);
 
 #endif

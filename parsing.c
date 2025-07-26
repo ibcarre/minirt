@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/07/26 22:34:41 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/07/27 00:59:41 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_obj	*init_obj()
 	t_obj	*obj;
 
 	obj = malloc(sizeof(t_obj));
+	if (!obj)
+		return (NULL);
 	obj->next = NULL;
 	obj->amlight = NULL;
 	obj->camera = NULL;
@@ -33,12 +35,68 @@ t_obj	*init_obj()
 	return (obj);
 }
 
+//check chaque valeur si valeur mauvaise print warning sur terminal et mise default value
+
+t_obj	*check_type(char *line, t_obj **obj)
+{
+	int	i;
+
+	if (!*obj)
+		return (NULL);
+	i = 0;
+	if (line[i] == 'a' || line[i] == 'A')
+		(*obj)->type = A_LIGHT;
+	else if ((line[i] == 'c' || line[i] == 'C') && line[i + 1] != 'y')
+		(*obj)->type = CAMERA;
+	else if (line[i] == 'l' || line[i] == 'L')
+		(*obj)->type = LIGHT;
+	else if (line[i] == 's' || line[i] == 'S')
+		(*obj)->type = SPHERE;
+	else if (line[i] == 'p' || line[i] == 'P')
+		(*obj)->type = PLANE;
+	else if ((line[i] == 'c' || line[i] == 'C') && line[i + 1] == 'y')
+		(*obj)->type = CYLINDER;
+	else
+	{
+		printf("Wrong type\n");
+		return (NULL);
+	}
+}
+
+t_obj	*get_obj(char *line, t_obj *first)
+{
+	t_obj	*last;
+	t_obj	*obj;
+
+	last = init_obj();
+	check_type(line, &last);
+	if (!last)
+	{
+		free_objs(first);
+		return (NULL);
+	}
+	line = skip_spaces(line);
+	if (!first)
+		return(last);
+	obj = get_last(first);
+	obj->next = last;
+	return (first);
+}
+
 t_obj	*parsing(int fd)
 {
 	char	*line;
 	t_obj	*first;
 
-	first = init_obj();
-	print_obj_param(first);
+	first = NULL;
 	line = get_next_line(fd);
+	while (line)
+	{
+		first = get_obj(line, first);
+		free(line);
+		if (!first)
+			return (NULL);
+		line = get_next_line(fd);
+	}
+	return (first);
 }

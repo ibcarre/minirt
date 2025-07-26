@@ -4,7 +4,13 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
 
-SRCS = *.c
+SRCS = main.c \
+	get_next_line.c\
+	get_next_line_utils.c\
+	debugging.c\
+	parsing.c\
+	parsing_utils.c\
+	minirt_utils.c\
 
 OBJ_DIR = obj
 
