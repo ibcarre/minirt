@@ -8,9 +8,10 @@ SRCS = main.c \
 	get_next_line.c\
 	get_next_line_utils.c\
 	debugging.c\
-	parsing.c\
-	parsing_utils.c\
+	check_parsing.c\
+	list_utils.c\
 	minirt_utils.c\
+	parsing_utils.c\
 
 OBJ_DIR = obj
 

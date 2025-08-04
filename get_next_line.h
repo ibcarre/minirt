@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibaaziz <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:42:15 by ibaaziz           #+#    #+#             */
-/*   Updated: 2024/12/06 11:59:29 by ibaaziz          ###   ########.fr       */
+/*   Updated: 2025/08/04 16:40:09 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,7 @@ char	*ft_half(char **line, int i);
 char	*ft_trim(char **line, int i);
 char	*ft_realloc_rd(char **line, int fd, int *rd);
 char	*get_next_line(int fd);
+int		is_correct(int fd);
+int		ft_isspace(char c);
 
 #endif
