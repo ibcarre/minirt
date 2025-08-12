@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 23:19:10 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/07/26 23:27:31 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/12 11:06:55 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	free_obj_type(t_obj *obj)
 {
+	if (!obj)
+		return ;
 	if (obj->amlight)
 		free(obj->amlight);
 	if (obj->camera)
@@ -32,6 +34,8 @@ void	free_obj_type(t_obj *obj)
 
 void	free_objs(t_obj *obj)
 {
+	if (!obj)
+		return ;
 	if (!obj->next)
 	{
 		free_obj_type(obj);

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/04 16:31:29 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/12 20:21:52 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ t_obj	*check_type(char *line, t_obj *obj)
 		(obj)->type = CAMERA;
 	else if (line[i] == 'l' || line[i] == 'L')
 		(obj)->type = LIGHT;
-	else if (line[i] == 's' || line[i] == 'S')
+	else if ((line[i] == 's' || line[i] == 'S') && line[i + 1] == 'p')
 		(obj)->type = SPHERE;
-	else if (line[i] == 'p' || line[i] == 'P')
+	else if ((line[i] == 'p' || line[i] == 'P') && line[i + 1] == 'l')
 		(obj)->type = PLANE;
 	else if ((line[i] == 'c' || line[i] == 'C') && line[i + 1] == 'y')
 		(obj)->type = CYLINDER;
 	else
 	{
+		free(obj);
 		printf("Wrong type\n");
 		return (NULL);
 	}
@@ -71,13 +72,13 @@ t_obj	*get_obj(char *line, t_obj *first)
 
 	line = skip_spaces(line);
 	last = init_obj();
-	check_type(line, last);
+	last = check_type(line, last);
+	fill_obj(line, &last);
 	if (!last)
 	{
 		free_objs(first);
 		return (NULL);
 	}
-	fill_obj(line, last);
 	if (!first)
 		return(last);
 	obj = get_last(first);

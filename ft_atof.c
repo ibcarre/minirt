@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/04 16:30:36 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/12 16:33:08 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ void	get_sign(int *sign, char *str, int *i, long *test)
 {
 	*sign = 1;
 	while (str[*i] && str[*i] != '-' && !is_digit(str[*i]))
-		*i++;
-	if (str[*i] == '-')
 	{
-		*i++;
+		*i = *i + 1;
+	}
+	if (str[*i] && str[*i] == '-')
+	{
+		*i = *i + 1;
 		*sign = -1;
-		*test++;
+		*test = *test + 1;
 	}
 }
 
@@ -45,9 +47,7 @@ int	ft_atoi(char *str)
 	get_sign(&sign, str, &i, &test);
 	while (str[i])
 	{
-		while(str[i] && !is_digit(str[i]))
-			i++;
-		if (!str[i])
+		if (!str[i] || !is_digit(str[i]))
 			break ;
 		if (res * 10 + str[i] - '0' > test)
 		{
@@ -61,7 +61,45 @@ int	ft_atoi(char *str)
 	return (res * sign);
 }
 
-double	ft_atof(char *str)
+int	intlen(int ent)
 {
-	
+	int	len;
+
+	len = 0 ;
+	if (ent < 0)
+		ent = ent * -1;
+	while (ent > 10)
+	{
+		ent = ent/10;
+		len++;
+	}
+	return (len + 1);
+}
+
+double	ft_atof(char *str, void **obj, int *i)
+{
+	long	ent;
+	int		dec;
+	double	res;
+
+	if (!*obj)
+		return (0);
+	*i = 0;
+	ent = ft_atoi(str);
+	while (is_digit(str[*i]))
+		*i = *i + 1;
+	if (ft_isspace(str[*i]) || !str[*i])
+		return (ent);
+	if (str[*i] && str[*i] != '.')
+	{
+		free(*obj);
+		*obj = NULL;
+		return (0);
+	}
+	*i = *i + 1;
+	dec = ft_atoi(&str[*i]);
+	ent = ent * pow(10, intlen(dec));
+	res = ent + dec;
+	res = res / pow(10, intlen(dec));
+	return (res);
 }

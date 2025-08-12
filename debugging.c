@@ -5,6 +5,7 @@ void	print_obj_param(t_obj *object)
 	printf("TYPE : %i\n", object->type);
 	printf("NEXT: %p\n", object->next);
 	printf("AMLIGHT: %p\n", object->amlight);
+	printf("RATIO: %f\n", object->amlight->ratio);
 	printf("CAMERA: %p\n", object->camera);
 	printf("LIGHT: %p\n", object->light);
 	printf("SPHERE: %p\n", object->sphere);

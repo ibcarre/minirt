@@ -12,6 +12,9 @@ SRCS = main.c \
 	list_utils.c\
 	minirt_utils.c\
 	parsing_utils.c\
+	parsing.c\
+	parsing_fill.c\
+	ft_atof.c\
 
 OBJ_DIR = obj
 

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 00:41:45 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/04 16:39:41 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/12 10:54:33 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*skip_spaces(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] && line[i] == ' ')
+	while (line[i] && ft_isspace(line[i]))
 		i++;
 	return (&line[i]);
 }

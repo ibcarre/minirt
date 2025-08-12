@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/07/27 08:21:38 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/12 20:15:50 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef enum e_type
 
 typedef struct s_amlight
 {
-	int		ratio;
+	double		ratio;
 } t_amlight;
 
 typedef struct s_camera
@@ -55,7 +55,7 @@ typedef struct s_camera
 
 typedef struct s_light
 {
-	int			ratio;
+	double		ratio;
 } t_light;
 
 typedef struct s_sphere
@@ -94,5 +94,9 @@ t_obj	*parsing(int fd);
 void	free_objs(t_obj *first);
 char	*skip_spaces(char *line);
 t_obj	*get_last(t_obj *first);
+void	fill_obj(char *line, t_obj **last);
+double	ft_atof(char *str, void **obj, int *i);
+int		ft_atoi(char *str);
+int	is_digit(char c);
 
 #endif
