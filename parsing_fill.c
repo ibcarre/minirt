@@ -6,63 +6,12 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 15:48:39 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/13 17:28:28 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-/*int	fill_col(t_obj **obj, char *line)
-{
-	int	i;
-	int	commas;
-
-	i = 0;
-	commas = 0;
-	line = skip_spaces(line);
-	while(line[i] && !ft_isspace(line[i]))
-	{
-		if (line[i] == ',')
-			commas ++;
-		i++;
-	}
-	if (commas != 2)
-		return (0);
-	(*obj)->col.x = ft_atoi(line);
-	i = 0;
-	while (line[i - 1] != ',')
-		i++;
-	(*obj)->col.y = ft_atoi(line);
-	while (line[i - 1] != ',')
-		i++;
-	(*obj)->col.z = ft_atoi(line);
-	*d = *d + i;
-	return (1);
-}*/
-
-int	fill_col(t_obj **obj, char **line)
-{
-	int	i;
-	int	commas;
-
-	i = 0;
-	commas = 0;
-	*line = skip_spaces(*line);
-	while((*line)[i] && !ft_isspace((*line)[i]))
-	{
-		if ((*line)[i] == ',')
-			commas ++;
-		i++;
-	}
-	if (commas != 2)
-		return (0);
-	(*obj)->col.x = ft_atoi(line);
-	i = 1;
-	(*obj)->col.y = ft_atoi(line);
-	i = 1;
-	(*obj)->col.z = ft_atoi(line);
-	return (1);
-}
 
 /*
 int	fill_pos(t_obj **obj, char *line)
@@ -108,7 +57,7 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 		return (free(*obj), *obj = NULL);
 	ratio = ft_atof(&line, &works);
 	(*obj)->amlight->ratio = ratio;
-	if (!fill_col(obj, &line) || !works)
+	if (!fill_col(*obj, &line) || !works)
 	{
 		free_objs(*obj);
 		(*obj) = NULL;
@@ -116,38 +65,7 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 	}
 	return (*obj);
 }
-/*
-t_obj	*fill_alight(char *line, t_obj **obj)
-{
-	int		i;
-	int		works;
-	double	ratio;
 
-	i = 0;
-	works = 1;
-	while (line[i] && !ft_isspace(line[i]))
-		i++;
-	line = skip_spaces(&line[i]);
-	(*obj)->amlight = malloc(sizeof(t_amlight));
-	ratio = ft_atof(&line, &works);
-	if (!((*obj)->amlight) || !works)
-	{
-		free(*obj);
-		*obj = NULL;
-		return (NULL);
-	}
-	(*obj)->amlight->ratio = ratio;
-	i = 0;
-	while (is_digit(line[i]))
-		i++;
-	if (!fill_col(obj, &line[i], &i))
-	{
-		free_objs(*obj);
-		(*obj) = NULL;
-		return (NULL);
-	}
-	return (*obj);
-}*/
 /*
 t_obj	*fill_sphere(char *line, t_obj **obj)
 {

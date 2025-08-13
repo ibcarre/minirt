@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 12:15:32 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/13 17:04:51 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,19 @@
 # include <unistd.h>
 # include "get_next_line.h"
 
-typedef struct s_vector3
+typedef struct s_color
 {
 	int	x;
 	int	y;
 	int	z;
-}	t_vector3;
+}	t_color;
+
+typedef struct s_pos
+{
+	double	x;
+	double	y;
+	double	z;
+}	t_pos;
 
 typedef enum e_type
 {
@@ -49,7 +56,7 @@ typedef struct s_amlight
 
 typedef struct s_camera
 {
-	t_vector3	orientation;
+	t_pos	orientation;
 	int			fov;
 } t_camera;
 
@@ -65,21 +72,21 @@ typedef struct s_sphere
 
 typedef struct s_plane
 {
-	t_vector3	normal;
+	t_pos	normal;
 } t_plane;
 
 typedef struct s_cylinder
 {
 	int			diameter;
 	int			height;
-	t_vector3	normal;
+	t_pos	normal;
 } t_cylinder;
 
 typedef struct s_obj
 {
 	t_type			type;
-	t_vector3		pos;
-	t_vector3		col;
+	t_pos			pos;
+	t_color			col;
 	t_cylinder		*cylinder;
 	t_plane			*plane;
 	t_sphere		*sphere;
@@ -98,5 +105,7 @@ void	fill_obj(char *line, t_obj **last);
 double	ft_atof(char **str, int *works);
 int		ft_atoi(char **str);
 int		is_digit(char c);
+int		fill_col(t_obj *obj, char **line);
+int		fill_pos(t_obj *obj, char **line);
 
 #endif
