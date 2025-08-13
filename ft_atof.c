@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/12 16:33:08 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/13 12:15:12 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	get_sign(int *sign, char *str, int *i, long *test)
 	}
 }
 
-int	ft_atoi(char *str)
+int	ft_atoi(char **str)
 {
 	long	res;
 	int	i;
@@ -44,20 +44,21 @@ int	ft_atoi(char *str)
 	res = 0;
 	i = 0;
 	test = __INT_MAX__;
-	get_sign(&sign, str, &i, &test);
+	get_sign(&sign, *str, &i, &test);
 	while (str[i])
 	{
-		if (!str[i] || !is_digit(str[i]))
+		if (!(*str)[i] || !is_digit((*str)[i]))
 			break ;
-		if (res * 10 + str[i] - '0' > test)
+		if (res * 10 + (*str)[i] - '0' > test)
 		{
 			printf("WARNING : Higher than INT MAX. Value truncated\n");
 			printf("If this is not the desired outcome, change the .rt file\n");
 			break ;
 		}
-		res = res * 10 + str[i] - '0';
+		res = res * 10 + (*str)[i] - '0';
 		i++;
 	}
+	*str = &((*str)[i]);
 	return (res * sign);
 }
 
@@ -76,30 +77,30 @@ int	intlen(int ent)
 	return (len + 1);
 }
 
-double	ft_atof(char *str, void **obj, int *i)
+double	ft_atof(char **str, int *works)
 {
 	long	ent;
 	int		dec;
 	double	res;
+	int		i;
 
-	if (!*obj)
-		return (0);
-	*i = 0;
+	i = 0;
 	ent = ft_atoi(str);
-	while (is_digit(str[*i]))
-		*i = *i + 1;
-	if (ft_isspace(str[*i]) || !str[*i])
+	while (is_digit((*str)[i]))
+		i = i + 1;
+	if (ft_isspace((*str)[i]) || !(*str)[i])
 		return (ent);
-	if (str[*i] && str[*i] != '.')
+	if ((*str)[i] && (*str)[i] != '.')
 	{
-		free(*obj);
-		*obj = NULL;
+		*works = 0;
+		*str = &((*str)[i]);
 		return (0);
 	}
-	*i = *i + 1;
-	dec = ft_atoi(&str[*i]);
+	i = i + 1;
+	dec = ft_atoi(&((*str)[i]));
 	ent = ent * pow(10, intlen(dec));
 	res = ent + dec;
+	*str = &((*str)[i]);
 	res = res / pow(10, intlen(dec));
 	return (res);
 }
