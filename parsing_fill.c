@@ -6,13 +6,13 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 12:18:19 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/13 15:48:39 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	fill_col(t_obj **obj, char *line)
+/*int	fill_col(t_obj **obj, char *line)
 {
 	int	i;
 	int	commas;
@@ -38,7 +38,32 @@ int	fill_col(t_obj **obj, char *line)
 	(*obj)->col.z = ft_atoi(line);
 	*d = *d + i;
 	return (1);
+}*/
+
+int	fill_col(t_obj **obj, char **line)
+{
+	int	i;
+	int	commas;
+
+	i = 0;
+	commas = 0;
+	*line = skip_spaces(*line);
+	while((*line)[i] && !ft_isspace((*line)[i]))
+	{
+		if ((*line)[i] == ',')
+			commas ++;
+		i++;
+	}
+	if (commas != 2)
+		return (0);
+	(*obj)->col.x = ft_atoi(line);
+	i = 1;
+	(*obj)->col.y = ft_atoi(line);
+	i = 1;
+	(*obj)->col.z = ft_atoi(line);
+	return (1);
 }
+
 /*
 int	fill_pos(t_obj **obj, char *line)
 {
@@ -79,6 +104,31 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 		i++;
 	line = skip_spaces(&line[i]);
 	(*obj)->amlight = malloc(sizeof(t_amlight));
+	if (!((*obj)->amlight))
+		return (free(*obj), *obj = NULL);
+	ratio = ft_atof(&line, &works);
+	(*obj)->amlight->ratio = ratio;
+	if (!fill_col(obj, &line) || !works)
+	{
+		free_objs(*obj);
+		(*obj) = NULL;
+		return (NULL);
+	}
+	return (*obj);
+}
+/*
+t_obj	*fill_alight(char *line, t_obj **obj)
+{
+	int		i;
+	int		works;
+	double	ratio;
+
+	i = 0;
+	works = 1;
+	while (line[i] && !ft_isspace(line[i]))
+		i++;
+	line = skip_spaces(&line[i]);
+	(*obj)->amlight = malloc(sizeof(t_amlight));
 	ratio = ft_atof(&line, &works);
 	if (!((*obj)->amlight) || !works)
 	{
@@ -97,7 +147,7 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 		return (NULL);
 	}
 	return (*obj);
-}
+}*/
 /*
 t_obj	*fill_sphere(char *line, t_obj **obj)
 {

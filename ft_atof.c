@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 12:15:12 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/13 15:05:37 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,22 @@ void	get_sign(int *sign, char *str, int *i, long *test)
 int	ft_atoi(char **str)
 {
 	long	res;
-	int	i;
+	int		i;
 	long	test;
-	int	sign;
+	int		sign;
 
 	res = 0;
 	i = 0;
 	test = __INT_MAX__;
 	get_sign(&sign, *str, &i, &test);
-	while (str[i])
+	while ((*str)[i] && !ft_isspace((*str)[i]))
 	{
-		if (!(*str)[i] || !is_digit((*str)[i]))
+		if ((*str)[i] == '.' || (*str)[i] == ',')
 			break ;
-		if (res * 10 + (*str)[i] - '0' > test)
+		if (res * 10 + (*str)[i] - '0' > test || !is_digit((*str)[i]))
 		{
-			printf("WARNING : Higher than INT MAX. Value truncated\n");
-			printf("If this is not the desired outcome, change the .rt file\n");
+			printf("%c\n", (*str)[i]);
+			printf("WAR : Weird parsing. Moving on\n");
 			break ;
 		}
 		res = res * 10 + (*str)[i] - '0';
@@ -86,8 +86,6 @@ double	ft_atof(char **str, int *works)
 
 	i = 0;
 	ent = ft_atoi(str);
-	while (is_digit((*str)[i]))
-		i = i + 1;
 	if (ft_isspace((*str)[i]) || !(*str)[i])
 		return (ent);
 	if ((*str)[i] && (*str)[i] != '.')
@@ -97,10 +95,23 @@ double	ft_atof(char **str, int *works)
 		return (0);
 	}
 	i = i + 1;
-	dec = ft_atoi(&((*str)[i]));
-	ent = ent * pow(10, intlen(dec));
-	res = ent + dec;
 	*str = &((*str)[i]);
+	dec = ft_atoi(str);
+	ent = ent * pow(10, intlen(dec));
+	if (intlen(dec) >= 6)
+		*works = 0;
+	res = ent + dec;
 	res = res / pow(10, intlen(dec));
 	return (res);
 }
+
+/*
+int main(int av, char **ac)
+{
+	int works;
+	works = 1;
+	printf("%f\n", ft_atof(&(ac[1]), &works));
+	if (!works)
+		printf("DOESNT WORK\n");
+	printf("%s\n", ac[1]);
+}*/
