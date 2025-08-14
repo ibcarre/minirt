@@ -6,40 +6,20 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 17:28:28 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 19:37:16 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-
-/*
-int	fill_pos(t_obj **obj, char *line)
+void	ft_ceil(double *ratio)
 {
-	int	i;
-	int	commas;
-
-	i = 0;
-	commas = 0;
-	line = skip_spaces(line);
-	while(line[i] && !ft_isspace(line[i]))
-	{
-		if (line[i] == ',')
-			commas ++;
-		i++;
-	}
-	if (commas != 2)
-		return (0);
-	(*obj)->pos.x = ft_atof(line);
-	i = 0;
-	while (line[i - 1] != ',')
-		i++;
-	(*obj)->pos.y = ft_atof(line);
-	while (line[i - 1] != ',')
-		i++;
-	(*obj)->pos.z = ft_atof(line);
-	return (1);
-}*/
+	printf("WAR : RATIO VALUE TOO LOW/HIGH IS NOW DEFAULT VALUE\n");
+	if (*ratio < 0)
+		*ratio = 0;
+	else
+		*ratio = 1;
+}
 
 t_obj	*fill_alight(char *line, t_obj **obj)
 {
@@ -56,6 +36,8 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 	if (!((*obj)->amlight))
 		return (free(*obj), *obj = NULL);
 	ratio = ft_atof(&line, &works);
+	if(ratio < 0 || ratio > 1)
+		ft_ceil(&ratio);
 	(*obj)->amlight->ratio = ratio;
 	if (!fill_col(*obj, &line) || !works)
 	{
@@ -63,6 +45,16 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 		(*obj) = NULL;
 		return (NULL);
 	}
+	return (*obj);
+}
+
+t_obj	*fill_sphere(char *line, t_obj **obj)
+{
+	int	works;
+
+	works = fill_pos(*obj, &line);
+	(*obj)->sphere = malloc(sizeof(t_sphere));
+	works ++;
 	return (*obj);
 }
 
@@ -104,7 +96,7 @@ void	fill_obj(char *line, t_obj **last)
 	if (!*last)
 		return ;
 	if ((*last)->type == A_LIGHT)
-		*last = fill_alight(line, last);
+		fill_alight(line, last);
 	//else if ((*last)->type == SPHERE)
 	//	fill_sphere(line, *last);
 	/*else if (last ->type == LIGHT)
@@ -115,6 +107,5 @@ void	fill_obj(char *line, t_obj **last)
 		fill_camera(line, last);
 	else if (last ->type == CYLINDER)
 		fill_cylinder(line, last);*/
-	if (!last)
-		write(2, "Parsing failed\n", 15);
+	return ;
 }

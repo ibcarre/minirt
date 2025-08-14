@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 23:48:46 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/07/26 23:49:53 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 18:04:17 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 t_obj	*get_last(t_obj *first)
 {
 	while (first->next)
+	{
 		first = first->next;
+	}
 	return (first);
 }

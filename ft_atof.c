@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 15:05:37 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 19:34:43 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,22 @@ void	get_sign(int *sign, char *str, int *i, long *test)
 	}
 }
 
+int	get_signz(char *str)
+{
+	int	sign;
+	int	i;
+
+	sign = 1;
+	i = 0;
+	while (str[i] && str[i] != '-' && !is_digit(str[i]))
+	{
+		i = i + 1;
+	}
+	if (str[i] && str[i] == '-')
+		sign = -1;
+	return (sign);
+}
+
 int	ft_atoi(char **str)
 {
 	long	res;
@@ -51,7 +67,6 @@ int	ft_atoi(char **str)
 			break ;
 		if (res * 10 + (*str)[i] - '0' > test || !is_digit((*str)[i]))
 		{
-			printf("%c\n", (*str)[i]);
 			printf("WAR : Weird parsing. Moving on\n");
 			break ;
 		}
@@ -83,16 +98,17 @@ double	ft_atof(char **str, int *works)
 	int		dec;
 	double	res;
 	int		i;
+	int		sign;
 
 	i = 0;
+	sign = get_signz(*str);
 	ent = ft_atoi(str);
 	if (ft_isspace((*str)[i]) || !(*str)[i])
 		return (ent);
 	if ((*str)[i] && (*str)[i] != '.')
 	{
-		*works = 0;
 		*str = &((*str)[i]);
-		return (0);
+		return (*works = 0, 0);
 	}
 	i = i + 1;
 	*str = &((*str)[i]);
@@ -102,7 +118,7 @@ double	ft_atof(char **str, int *works)
 		*works = 0;
 	res = ent + dec;
 	res = res / pow(10, intlen(dec));
-	return (res);
+	return (res * sign);
 }
 
 /*

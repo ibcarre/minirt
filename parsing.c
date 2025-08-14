@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 14:54:55 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 18:06:42 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_obj	*get_obj(char *line, t_obj *first)
 		return (NULL);
 	}
 	if (!first)
-		return(last);
+		return (last);
 	obj = get_last(first);
 	obj->next = last;
 	return (first);
@@ -103,11 +103,5 @@ t_obj	*parsing(int fd)
 		while (line && line[0] == '\n')
 			line = get_next_line(fd);
 	}
-	printf("FIRSTTTTTTTTTTTTTTTTTTTTTTTTT\n");
-	print_obj_param(first);
-	printf("SECONDDDDDDDDDDDDDDDDDDDDDDDD\n");
-	print_obj_param(first->next);
-	printf("THREEEEEEEEEEEEEEEEEEEEEEEEEE\n");
-	print_obj_param(first->next->next);
 	return (first);
 }

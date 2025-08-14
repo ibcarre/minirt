@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:51 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/12 11:00:46 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 18:06:02 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,9 @@ int	main(int argv, char **argc)
 	first = parsing(fd);
 	if (!first)
 		return (write(2, "Error, failed parsing\n", 22), 3);
+	while(first)
+	{
+		print_obj_param(first);
+		first = first->next;
+	}
 }

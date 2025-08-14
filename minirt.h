@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/13 17:04:51 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 18:16:39 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_light
 
 typedef struct s_sphere
 {
-	int			diameter;
+	double		diameter;
 } t_sphere;
 
 typedef struct s_plane
@@ -77,9 +77,9 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	int			diameter;
-	int			height;
-	t_pos	normal;
+	double		diameter;
+	double		height;
+	t_pos		normal;
 } t_cylinder;
 
 typedef struct s_obj
