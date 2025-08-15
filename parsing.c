@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 18:06:42 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 19:49:49 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,11 @@ t_obj	*parsing(int fd)
 			return (NULL);
 		line = get_next_line(fd);
 		while (line && line[0] == '\n')
+		{
+			free(line);
 			line = get_next_line(fd);
+		}
 	}
+	free(line);
 	return (first);
 }

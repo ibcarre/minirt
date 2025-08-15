@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 23:19:10 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 19:37:36 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/14 19:57:37 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	free_objs(t_obj *obj)
 {
 	if (!obj)
 		return ;
-	if (!obj->next)
+	if (!(obj->next))
 	{
 		free_obj_type(obj);
 		free(obj);
