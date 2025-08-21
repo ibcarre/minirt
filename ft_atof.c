@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 19:34:43 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/21 17:55:33 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,13 @@ int	intlen(int ent)
 	return (len + 1);
 }
 
+long	ft_abs(long nb)
+{
+	if (nb < 0)
+		return (nb * -1);
+	return (nb);
+}
+
 double	ft_atof(char **str, int *works)
 {
 	long	ent;
@@ -113,7 +120,7 @@ double	ft_atof(char **str, int *works)
 	i = i + 1;
 	*str = &((*str)[i]);
 	dec = ft_atoi(str);
-	ent = ent * pow(10, intlen(dec));
+	ent = ft_abs(ent) * pow(10, intlen(dec));
 	if (intlen(dec) >= 6)
 		*works = 0;
 	res = ent + dec;
@@ -121,13 +128,13 @@ double	ft_atof(char **str, int *works)
 	return (res * sign);
 }
 
-/*
-int main(int av, char **ac)
-{
-	int works;
-	works = 1;
-	printf("%f\n", ft_atof(&(ac[1]), &works));
-	if (!works)
-		printf("DOESNT WORK\n");
-	printf("%s\n", ac[1]);
-}*/
+
+// int main(int av, char **ac)
+// {
+// 	int works;
+// 	works = 1;
+// 	printf("%f\n", ft_atof(&(ac[1]), &works));
+// 	if (!works)
+// 		printf("DOESNT WORK\n");
+// 	printf("%s\n", ac[1]);
+// }

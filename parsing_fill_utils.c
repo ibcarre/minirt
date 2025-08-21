@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 17:47:32 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/20 19:20:23 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ int	fill_pos(t_obj *obj, char **line)
 	}
 	if (commas != 2)
 		return (0);
-	(obj)->col.x = ft_atof(line, &commas);
+	(obj)->pos.x = ft_atof(line, &commas);
 	i = 1;
-	(obj)->col.y = ft_atof(line, &commas);
+	(obj)->pos.y = ft_atof(line, &commas);
 	i = 1;
-	(obj)->col.z = ft_atof(line, &commas);
+	(obj)->pos.z = ft_atof(line, &commas);
 	if (!commas)
 		return (0);
 	return (1);
