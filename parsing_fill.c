@@ -6,20 +6,20 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/21 18:17:38 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:54:05 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_ceil(double *ratio)
-{
-	printf("WAR : RATIO VALUE TOO LOW/HIGH IS NOW DEFAULT VALUE\n");
-	if (*ratio < 0)
-		*ratio = 0;
-	else
-		*ratio = 1;
-}
+// void	ft_ceil(double *ratio)
+// {
+// 	printf("WAR : RATIO VALUE TOO LOW/HIGH IS NOW DEFAULT VALUE\n");
+// 	if (*ratio < 0)
+// 		*ratio = 0;
+// 	else
+// 		*ratio = 1;
+// }
 
 t_obj	*fill_alight(char *line, t_obj **obj)
 {
@@ -35,9 +35,7 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 	(*obj)->amlight = malloc(sizeof(t_amlight));
 	if (!((*obj)->amlight))
 		return (free(*obj), *obj = NULL);
-	ratio = ft_atof(&line, &works);
-	if(ratio < 0 || ratio > 1)
-		ft_ceil(&ratio);
+	ratio = ft_ceil(ft_atof(&line, &works), 0, 1);
 	(*obj)->amlight->ratio = ratio;
 	if (!fill_col(*obj, &line) || !works)
 	{
@@ -92,9 +90,7 @@ t_obj	*fill_light(char *line, t_obj **obj)
 		works = 0;
 	if (!works)
 		return (free(*obj), *obj = NULL);
-	ratio = ft_atof(&line, &works);
-	if(ratio < 0 || ratio > 1)
-		ft_ceil(&ratio);
+	ratio = ft_ceil(ft_atof(&line, &works), 0, 1);
 	(*obj)->light->ratio = ratio;
 	if (!fill_col(*obj, &line) || !works)
 	{
@@ -107,7 +103,66 @@ t_obj	*fill_light(char *line, t_obj **obj)
 
 t_obj	*fill_camera(char *line, t_obj **obj)
 {
-	line[0] = 'q';
+	int	i;
+
+	i = 0;
+	while (line[i] && !ft_isspace(line[i]))
+		i++;
+	line = skip_spaces(&line[i]);
+	i = 1;
+	(*obj)->camera = malloc(sizeof(t_camera));
+	if (!fill_pos(*obj, &line) || !((*obj)->camera))
+		return (free(*obj), *obj = NULL);
+	if (!fill_or(&((*obj)->camera->orientation), &line))
+		return (free_objs(*obj), *obj = NULL);
+	(*obj)->camera->fov = ft_ceil(ft_atof(&line, &i), 0, 180);
+	if (!i)
+		return (free_objs(*obj), *obj = NULL);
+	return (*obj);
+}
+
+t_obj	*fill_plane(char *line, t_obj **obj)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && !ft_isspace(line[i]))
+		i++;
+	line = skip_spaces(&line[i]);
+	(*obj)->plane = malloc(sizeof(t_plane));
+	if (!fill_pos(*obj, &line) || !((*obj)->plane))
+		return (free(*obj), *obj = NULL);
+	if (!fill_or(&((*obj)->plane->normal), &line))
+		return (free_objs(*obj), *obj = NULL);
+	if (!fill_col(*obj, &line))
+	{
+		free_objs(*obj);
+		(*obj) = NULL;
+	}
+	return (*obj);
+}
+
+t_obj	*fill_cylinder(char *line, t_obj **obj)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && !ft_isspace(line[i]))
+		i++;
+	line = skip_spaces(&line[i]);
+	i = 1;
+	(*obj)->cylinder = malloc(sizeof(t_cylinder));
+	if (!fill_pos(*obj, &line) || !((*obj)->cylinder))
+		return (free(*obj), *obj = NULL);
+	if (!fill_or(&((*obj)->cylinder->normal), &line))
+		return (free_objs(*obj), *obj = NULL);
+	(*obj)->cylinder->diameter = ft_atof(&line, &i);
+	(*obj)->cylinder->height = ft_atof(&line, &i);
+	if (!fill_col(*obj, &line) || !i)
+	{
+		free_objs(*obj);
+		(*obj) = NULL;
+	}
 	return (*obj);
 }
 
@@ -124,9 +179,9 @@ void	fill_obj(char *line, t_obj **last)
 		fill_light(line, last);
 	else if ((*last)->type == CAMERA)
 		fill_camera(line, last);
-	/*else if (last ->type == PLANE)
-		fill_camera(line, last);
-	else if (last ->type == CYLINDER)
-		fill_cylinder(line, last);*/
+	else if ((*last)->type == PLANE)
+		fill_plane(line, last);
+	else if ((*last) ->type == CYLINDER)
+		fill_cylinder(line, last);
 	return ;
 }

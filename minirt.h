@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 18:16:39 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:44:13 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,7 @@ int		ft_atoi(char **str);
 int		is_digit(char c);
 int		fill_col(t_obj *obj, char **line);
 int		fill_pos(t_obj *obj, char **line);
+int		fill_or(t_pos *pos, char **line);
+double	ft_ceil(double nb, double min, double max);
 
 #endif

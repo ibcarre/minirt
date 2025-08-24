@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/21 17:55:33 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:19:42 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,9 @@ double	ft_atof(char **str, int *works)
 	i = 0;
 	sign = get_signz(*str);
 	ent = ft_atoi(str);
-	if (ft_isspace((*str)[i]) || !(*str)[i])
-		return (ent);
-	if ((*str)[i] && (*str)[i] != '.')
+	if (ft_isspace((*str)[i]) || !(*str)[i] || (*str)[i] == ',')
+		return (i++, *str = &((*str)[i]), ent);
+	if (((*str)[i] && (*str)[i] != '.') || (!*works))
 	{
 		*str = &((*str)[i]);
 		return (*works = 0, 0);

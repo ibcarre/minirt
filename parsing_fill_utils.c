@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/20 19:20:23 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 17:46:23 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,48 @@ int	fill_pos(t_obj *obj, char **line)
 	if (commas != 2)
 		return (0);
 	(obj)->pos.x = ft_atof(line, &commas);
-	i = 1;
 	(obj)->pos.y = ft_atof(line, &commas);
-	i = 1;
 	(obj)->pos.z = ft_atof(line, &commas);
 	if (!commas)
 		return (0);
 	return (1);
+}
+
+double ft_ceil(double nb, double min, double max)
+{
+	if (nb < min)
+	{
+		nb = min;
+		printf("WAR : number too low ceiled to min %f\n", min);
+	}
+	else if (nb > max)
+	{
+		printf("WAR : number too high floored to max %f\n", max);
+		nb = max;
+	}
+	return (nb);
+}
+
+int	fill_or(t_pos *pos, char **line)
+{
+	int	i;
+	int	commas;
+
+	i = 0;
+	commas = 0;
+	*line = skip_spaces(*line);
+	while((*line)[i] && !ft_isspace((*line)[i]))
+	{
+		if ((*line)[i] == ',')
+			commas ++;
+		i++;
+	}
+	if (commas != 2)
+		return (0);
+	pos->x = ft_ceil(ft_atof(line, &commas), -1, 1);
+	pos->y = ft_ceil(ft_atof(line, &commas), -1, 1);
+	pos->z = ft_ceil(ft_atof(line, &commas), -1, 1);
+	if (!commas)
+		return (0);
+	return (1);	
 }

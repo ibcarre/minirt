@@ -17,11 +17,11 @@ void	print_obj_param(t_obj *object)
 	case 3:
 		printf("PLANE NORMAL: %f;%f;%f\n", object->plane->normal.x, object->plane->normal.y, object->plane->normal.z);
 		break;
-	case 4:
-		printf("CAMER DIAM: %f HEIGHT %f NORMAL %f;%f;%f\n", object->cylinder->diameter, object->cylinder->height, object->cylinder->normal.x, object->cylinder->normal.y, object->cylinder->normal.z);
-		break;
 	case 5:
-		printf("CYL FOV: %i ORIENTATION %f;%f;%f\n", object->camera->fov, object->camera->orientation.x, object->camera->orientation.y, object->camera->orientation.z);
+		printf("CYL DIAM: %f HEIGHT %f NORMAL %f;%f;%f\n", object->cylinder->diameter, object->cylinder->height, object->cylinder->normal.x, object->cylinder->normal.y, object->cylinder->normal.z);
+		break;
+	case 4:
+		printf("CAM FOV: %i ORIENTATION %f;%f;%f\n", object->camera->fov, object->camera->orientation.x, object->camera->orientation.y, object->camera->orientation.z);
 		break;
 	}
 	printf("NEXT: %p\n", object->next);

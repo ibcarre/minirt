@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 19:49:49 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 18:01:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,36 @@ t_obj	*get_obj(char *line, t_obj *first)
 	return (first);
 }
 
+void	check_nb(t_obj **obj)
+{
+	t_obj	*first;
+	int		camera;
+	int		al;
+	int		light;
+
+	first = *obj;
+	camera = 0;
+	al = 0;
+	light = 0;
+	while (*obj)
+	{
+		if ((*obj)->type == A_LIGHT)
+			al++;
+		else if ((*obj)->type == CAMERA)
+			camera++;
+		else if((*obj)->type == LIGHT)
+			light++;
+		*obj = (*obj)->next;
+	}
+	*obj = first;
+	if (al != 1 || camera != 1 || light != 1)
+	{
+		free_objs(first);
+		*obj = NULL;
+	}
+}
+
+
 t_obj	*parsing(int fd)
 {
 	char	*line;
@@ -107,5 +137,6 @@ t_obj	*parsing(int fd)
 		}
 	}
 	free(line);
+	check_nb(&first);
 	return (first);
 }
