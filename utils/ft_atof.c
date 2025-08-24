@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 17:19:42 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 18:32:41 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 int	is_digit(char c)
 {

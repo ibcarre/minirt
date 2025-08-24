@@ -1,22 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_utils.c                                       :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/26 23:48:46 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/14 18:04:17 by ibtihal          ###   ########.fr       */
+/*   Created: 2025/07/27 00:41:45 by ibtihal           #+#    #+#             */
+/*   Updated: 2025/08/24 18:32:08 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
-t_obj	*get_last(t_obj *first)
+
+int	ft_isspace(char c)
 {
-	while (first->next)
-	{
-		first = first->next;
-	}
-	return (first);
+	if (c == '\t' || (c >= 10 && c < 14))
+		return (1);
+	if (c == ' ')
+		return (1);
+	return (0);
+}
+
+
+char	*skip_spaces(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && ft_isspace(line[i]))
+		i++;
+	return (&line[i]);
 }

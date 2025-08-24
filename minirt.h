@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 17:44:13 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 18:30:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "get_next_line.h"
+# include "./utils/get_next_line.h"
 
 typedef struct s_color
 {

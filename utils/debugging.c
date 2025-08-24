@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 void	print_obj_param(t_obj *object)
 {

@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 17:46:23 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 18:31:57 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 void	check_col(t_obj *obj)
 {

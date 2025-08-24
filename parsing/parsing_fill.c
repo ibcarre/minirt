@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 17:54:05 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 18:32:03 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 // void	ft_ceil(double *ratio)
 // {

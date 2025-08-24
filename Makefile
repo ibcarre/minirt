@@ -5,21 +5,20 @@ CFLAGS = -Wall -Wextra -Werror -g
 LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
 
 SRCS = main.c \
-	get_next_line.c\
-	get_next_line_utils.c\
-	debugging.c\
-	check_parsing.c\
-	list_utils.c\
-	minirt_utils.c\
-	parsing_utils.c\
-	parsing.c\
-	parsing_fill.c\
-	parsing_fill_utils.c\
-	ft_atof.c\
+	utils/get_next_line.c\
+	utils/get_next_line_utils.c\
+	utils/debugging.c\
+	utils/list_utils.c\
+	utils/minirt_utils.c\
+	parsing/parsing_utils.c\
+	parsing/parsing.c\
+	parsing/parsing_fill.c\
+	parsing/parsing_fill_utils.c\
+	utils/ft_atof.c\
 
 OBJ_DIR = obj
 
-OBJ = $(addprefix $(OBJ_DIR)/,$(SRCS:%.c=%.o))
+OBJ = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 MINILIBX = ./minilibx-linux/libmlx_Linux.a
 
@@ -29,14 +28,14 @@ $(NAME): $(MINILIBX) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o: %.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(MINILIBX):
 	make -C ./minilibx-linux
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ_DIR)
 	make -C ./minilibx-linux clean
 
 fclean: clean

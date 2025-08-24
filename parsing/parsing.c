@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 18:01:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/24 18:32:13 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 t_obj	*init_obj()
 {
