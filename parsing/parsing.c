@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 18:32:13 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/25 16:38:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,24 +91,20 @@ void	check_nb(t_obj **obj)
 	t_obj	*first;
 	int		camera;
 	int		al;
-	int		light;
 
 	first = *obj;
 	camera = 0;
 	al = 0;
-	light = 0;
 	while (*obj)
 	{
 		if ((*obj)->type == A_LIGHT)
 			al++;
 		else if ((*obj)->type == CAMERA)
 			camera++;
-		else if((*obj)->type == LIGHT)
-			light++;
 		*obj = (*obj)->next;
 	}
 	*obj = first;
-	if (al != 1 || camera != 1 || light != 1)
+	if (al > 1 || camera != 1)
 	{
 		free_objs(first);
 		*obj = NULL;

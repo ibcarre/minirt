@@ -15,6 +15,7 @@ SRCS = main.c \
 	parsing/parsing_fill.c\
 	parsing/parsing_fill_utils.c\
 	utils/ft_atof.c\
+	render/render.c\
 
 OBJ_DIR = obj
 

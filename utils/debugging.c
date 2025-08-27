@@ -2,6 +2,7 @@
 
 void	print_obj_param(t_obj *object)
 {
+	while (object) {
 	printf("TYPE : %i\n", object->type);
 	switch (object->type)
 	{
@@ -34,4 +35,6 @@ void	print_obj_param(t_obj *object)
 	printf("COL R %i, COL G %i COL B %i\n", object->col.x, object->col.y, object->col.z);
 	printf("POS X %f, POS Y %f POS Z %f\n", object->pos.x, object->pos.y, object->pos.z);
 	printf("\n\n\n");
+	object = object->next;
+	}
 }
