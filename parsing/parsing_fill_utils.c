@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/24 18:31:57 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:49:42 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	check_col(t_obj *obj)
 {
 	if (obj->col.x < 0 || obj->col.y < 0 || obj->col.z < 0)
-		printf("COLOR VALUES LOWER THAN 0 CEILED TO 0");
+		printf("COLOR VALUES LOWER THAN 0 CLAMPED TO 0");
 	if (obj->col.x > 255 || obj->col.y > 255 || obj->col.z > 255)
-		printf("COLOR VALUES HIGHER THAN 255 FLOORED TO 255");
+		printf("COLOR VALUES HIGHER THAN 255 CLAMPED TO 255");
 	if (obj->col.x < 0)
 		obj->col.x = 0;
 	if (obj->col.y < 0)
@@ -81,16 +81,16 @@ int	fill_pos(t_obj *obj, char **line)
 	return (1);
 }
 
-double ft_ceil(double nb, double min, double max)
+double ft_clamp(double nb, double min, double max)
 {
 	if (nb < min)
 	{
 		nb = min;
-		printf("WAR : number too low ceiled to min %f\n", min);
+		printf("WAR : number too low clamped to min %f\n", min);
 	}
 	else if (nb > max)
 	{
-		printf("WAR : number too high floored to max %f\n", max);
+		printf("WAR : number too high clamped to max %f\n", max);
 		nb = max;
 	}
 	return (nb);
@@ -112,9 +112,9 @@ int	fill_or(t_pos *pos, char **line)
 	}
 	if (commas != 2)
 		return (0);
-	pos->x = ft_ceil(ft_atof(line, &commas), -1, 1);
-	pos->y = ft_ceil(ft_atof(line, &commas), -1, 1);
-	pos->z = ft_ceil(ft_atof(line, &commas), -1, 1);
+	pos->x = ft_clamp(ft_atof(line, &commas), -1, 1);
+	pos->y = ft_clamp(ft_atof(line, &commas), -1, 1);
+	pos->z = ft_clamp(ft_atof(line, &commas), -1, 1);
 	if (!commas)
 		return (0);
 	return (1);	

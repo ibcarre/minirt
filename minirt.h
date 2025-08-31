@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/27 16:48:55 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:47:53 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int		is_digit(char c);
 int		fill_col(t_obj *obj, char **line);
 int		fill_pos(t_obj *obj, char **line);
 int		fill_or(t_pos *pos, char **line);
-double	ft_ceil(double nb, double min, double max);
+double	ft_clamp(double nb, double min, double max);
 void	render(t_obj *first);
 
 #endif

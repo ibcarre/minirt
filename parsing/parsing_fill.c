@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/25 16:35:31 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:49:22 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_obj	*fill_alight(char *line, t_obj **obj)
 	(*obj)->amlight = malloc(sizeof(t_amlight));
 	if (!((*obj)->amlight))
 		return (free(*obj), *obj = NULL);
-	ratio = ft_ceil(ft_atof(&line, &works), 0, 1);
+	ratio = ft_clamp(ft_atof(&line, &works), 0, 1);
 	(*obj)->amlight->ratio = ratio;
 	if (!fill_col(*obj, &line) || !works)
 	{
@@ -90,7 +90,7 @@ t_obj	*fill_light(char *line, t_obj **obj)
 		works = 0;
 	if (!works)
 		return (free(*obj), *obj = NULL);
-	ratio = ft_ceil(ft_atof(&line, &works), 0, 1);
+	ratio = ft_clamp(ft_atof(&line, &works), 0, 1);
 	(*obj)->light->ratio = ratio;
 	if (!fill_col(*obj, &line) || !works)
 	{
@@ -115,7 +115,7 @@ t_obj	*fill_camera(char *line, t_obj **obj)
 		return (free(*obj), *obj = NULL);
 	if (!fill_or(&((*obj)->camera->orientation), &line))
 		return (free_objs(*obj), *obj = NULL);
-	(*obj)->camera->fov = ft_ceil(ft_atof(&line, &i), 0, 180);
+	(*obj)->camera->fov = ft_clamp(ft_atof(&line, &i), 0, 180);
 	if (!i)
 		return (free_objs(*obj), *obj = NULL);
 	return (*obj);
@@ -156,8 +156,8 @@ t_obj	*fill_cylinder(char *line, t_obj **obj)
 		return (free(*obj), *obj = NULL);
 	if (!fill_or(&((*obj)->cylinder->normal), &line))
 		return (free_objs(*obj), *obj = NULL);
-	(*obj)->cylinder->diameter = ft_ceil(ft_atof(&line, &i), 0, INT_MAX);
-	(*obj)->cylinder->height = ft_ceil(ft_atof(&line, &i), 0, INT_MAX);
+	(*obj)->cylinder->diameter = ft_clamp(ft_atof(&line, &i), 0, INT_MAX);
+	(*obj)->cylinder->height = ft_clamp(ft_atof(&line, &i), 0, INT_MAX);
 	if (!fill_col(*obj, &line) || !i)
 	{
 		free_objs(*obj);
