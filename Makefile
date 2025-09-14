@@ -16,6 +16,9 @@ SRCS = main.c \
 	parsing/parsing_fill_utils.c\
 	utils/ft_atof.c\
 	render/render.c\
+	vector_math/vec.c\
+	vector_math/vec_on_vec.c\
+
 
 OBJ_DIR = obj
 
