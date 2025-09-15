@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/15 16:21:23 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/15 16:41:59 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define WIDTH 720
 # define HEIGHT 480
+# define FOC 1.0
 # define INT_MAX 0x7fffffff
 # define MINUS 0	
 # define ADD 1
@@ -62,7 +63,7 @@ typedef struct s_camera
 	t_pos		orientation;
 	int			fov;
 	double		foc_length;
-	t_viewport	viewport;
+	t_pos		viewport;
 } t_camera;
 
 typedef struct s_light
@@ -118,6 +119,8 @@ typedef struct	s_data {
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
+	int		x;
+	int		y;
 	int		endian;
 }	t_data;
 
