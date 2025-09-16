@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/15 16:58:59 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/16 15:37:47 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,23 @@ int	create_trgb(int t, int r, int g, int b)
 void	ray_color(t_ray ray, t_vars mlx, t_data *img)
 {
 	int		color;
+	t_color col;
+	t_pos	norm_v;
+	float	res;
 
 	(void)mlx;
 	(void)ray;
-	color = create_trgb(0, 0, 0, 0);
+	norm_v = vec_normalize(ray.direction);
+	// printf("NORMALISEE %f\n", norm_v.y);
+	// printf("RAY DIRECTION %f\n", ray.direction.y);
+	float a = 0.5 * norm_v.y + 1;
+	res = (((1 - a) + (a * 0.5)) * 255);
+	col.x = res;
+	res = (((1 - a) + (a * 0.7)) * 255);
+	col.y = res;
+	res = (((1 - a) + (a * 1)) * 255);
+	col.z = res;
+	color = create_trgb(0, col.x, col.y, col.z);
 	my_mlx_pixel_put(img, img->y, img->x, color);
 	return;
 }

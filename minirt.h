@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/15 16:41:59 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/16 15:43:16 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define HEIGHT 480
 # define FOC 1.0
 # define INT_MAX 0x7fffffff
-# define MINUS 0	
+# define MINUS 0
 # define ADD 1
 
 # include "minilibx-linux/mlx.h"
@@ -145,12 +145,14 @@ int		fill_pos(t_obj *obj, char **line);
 int		fill_or(t_pos *pos, char **line);
 double	ft_clamp(double nb, double min, double max);
 void	render(t_obj *first);
-t_pos	vec_div(t_pos vec, int nb);
-t_pos	vec_add(t_pos vec, int nb, int op);
-t_pos	vec_mul(t_pos vec, int nb);
+t_pos	vec_div(t_pos vec, double nb);
+t_pos	vec_add(t_pos vec, double nb, int op);
+t_pos	vec_mul(t_pos vec, double nb);
 t_pos	vec_init(double x, double y, double z);
 t_pos	vec_div_vec(t_pos vec, t_pos vec2);
 t_pos	vec_add_vec(t_pos vec, t_pos vec2, int nb);
 t_pos	vec_mul_vec(t_pos vec, t_pos vec2);
+float	vec_length(t_pos vec);
+t_pos	vec_normalize(t_pos vec);
 
 #endif
