@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/16 15:37:47 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/18 21:42:39 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,52 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
+int	hits_sphere(t_ray ray, t_vars mlx)
+{
+	t_pos	cr;
+	double	a;
+	double	b;
+	double	c;
+	double delta;
+
+	while (mlx.first)
+	{
+		if (mlx.first->type == SPHERE)
+		{
+			cr = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
+			a = dot_product(ray.direction, ray.direction);
+			b = -2 * dot_product(ray.direction, cr);
+			c = dot_product(cr, cr) - pow((mlx.first->sphere->diameter/2),2);
+			delta = b*b - 4 * a * c;
+			if (delta >= 0)
+				return (1);
+		}
+		mlx.first = mlx.first->next;
+	}
+	return (0);
+}
+
+int	check_meshes(t_ray ray, t_vars mlx)
+{
+	t_pos	norm_v;
+	t_color col;
+
+	if (hits_sphere(ray, mlx))
+		return (create_trgb(0, 255, 0, 0));
+	norm_v = vec_normalize(ray.direction);
+	float a = 0.5 * norm_v.y + 1;
+	col.x = (((1 - a) + (a * 0.5)) * 255);
+	col.y = (((1 - a) + (a * 0.7)) * 255);
+	col.z = (((1 - a) + (a * 1)) * 255);
+	return (create_trgb(0, col.x, col.y, col.z));
+
+}
+
 void	ray_color(t_ray ray, t_vars mlx, t_data *img)
 {
 	int		color;
-	t_color col;
-	t_pos	norm_v;
-	float	res;
 
-	(void)mlx;
-	(void)ray;
-	norm_v = vec_normalize(ray.direction);
-	// printf("NORMALISEE %f\n", norm_v.y);
-	// printf("RAY DIRECTION %f\n", ray.direction.y);
-	float a = 0.5 * norm_v.y + 1;
-	res = (((1 - a) + (a * 0.5)) * 255);
-	col.x = res;
-	res = (((1 - a) + (a * 0.7)) * 255);
-	col.y = res;
-	res = (((1 - a) + (a * 1)) * 255);
-	col.z = res;
-	color = create_trgb(0, col.x, col.y, col.z);
+	color = check_meshes(ray, mlx);
 	my_mlx_pixel_put(img, img->y, img->x, color);
 	return;
 }
@@ -91,7 +117,7 @@ void	render_image(t_vars mlx, t_data *img)
 	img->y = 0;
 	camera = get_camera(mlx.first);
 	view_h = 15.0;
-	view_w = view_h * (double)WIDTH/(double)HEIGHT;
+	view_w = (view_h * (double)WIDTH)/(double)HEIGHT;
 	camera->camera->foc_length = FOC;
 	camera->camera->viewport = vec_init(view_w, -view_h, -camera->camera->foc_length);
 	pixel_delta.x = camera->camera->viewport.x/(double)WIDTH;

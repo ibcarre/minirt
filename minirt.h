@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/16 15:43:16 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/18 21:38:03 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,6 @@ t_pos	vec_add_vec(t_pos vec, t_pos vec2, int nb);
 t_pos	vec_mul_vec(t_pos vec, t_pos vec2);
 float	vec_length(t_pos vec);
 t_pos	vec_normalize(t_pos vec);
+double	dot_product(t_pos vec, t_pos vec2);
 
 #endif
