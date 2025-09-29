@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 14:30:26 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/18 21:20:29 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/29 15:26:08 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_pos	vec_init(double x, double y, double z)
 	return (vec);
 }
 
-float	vec_length(t_pos vec)
+double	vec_length(t_pos vec)
 {
 	double	res;
 

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/29 15:16:32 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/29 15:40:22 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define WIDTH 720
 # define HEIGHT 480
-# define FOC 1.0
+# define FOC 2.0
 # define INT_MAX 0x7fffffff
 # define MINUS 0
 # define ADD 1
@@ -152,7 +152,7 @@ t_pos	vec_init(double x, double y, double z);
 t_pos	vec_div_vec(t_pos vec, t_pos vec2);
 t_pos	vec_add_vec(t_pos vec, t_pos vec2, int nb);
 t_pos	vec_mul_vec(t_pos vec, t_pos vec2);
-float	vec_length(t_pos vec);
+double	vec_length(t_pos vec);
 t_pos	vec_normalize(t_pos vec);
 double	dot_product(t_pos vec, t_pos vec2);
 
