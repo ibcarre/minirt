@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/29 16:18:50 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/09/29 16:31:11 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-double	hits_sphere(t_ray ray, t_vars mlx)
+double	hits_sphere(t_ray ray, t_vars mlx, t_pos *center)
 {
 	t_pos	cr;
 	double	a;
@@ -65,6 +65,7 @@ double	hits_sphere(t_ray ray, t_vars mlx)
 	{
 		if (mlx.first->type == SPHERE)
 		{
+			*center = mlx.first->pos;
 			cr = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
 			a = dot_product(ray.direction, ray.direction);
 			b = -2 * dot_product(ray.direction, cr);
@@ -86,15 +87,14 @@ int	check_meshes(t_ray ray, t_vars mlx)
 	t_color col;
 	double	t;
 	t_pos	inter_norm;
-	t_pos	zdown;
+	t_pos	sphere_c;
 
-	zdown = vec_init(0, 0, -10);
-	t = hits_sphere(ray, mlx);
+	sphere_c = vec_init(0, 0, 0); //center_sphere
+	t = hits_sphere(ray, mlx, &sphere_c);
 	if (t > 0.0)
 	{
 		inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, t), ADD);
-		inter_norm = vec_add_vec(inter_norm, zdown, MINUS);
-		printf("\n\n%f, %f, %f\n\n", inter_norm.x, inter_norm.y, inter_norm.z);
+		inter_norm = vec_add_vec(inter_norm, sphere_c, MINUS);
 		inter_norm = vec_normalize(inter_norm);
 		col.x = (inter_norm.x + 1.0) * 127.5;
 		col.y = (inter_norm.y + 1.0) * 127.5;
