@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/29 16:31:11 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/06 20:57:55 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ t_obj	*get_camera(t_obj *obj)
 	return (NULL);
 }
 
+double	my_sq(double x)
+{
+	return (x * x);
+}
 
 int	create_trgb(int t, int r, int g, int b)
 {
@@ -55,9 +59,9 @@ int	create_trgb(int t, int r, int g, int b)
 
 double	hits_sphere(t_ray ray, t_vars mlx, t_pos *center)
 {
-	t_pos	cr;
+	t_pos	or_to_oc; //rayon to centre
 	double	a;
-	double	b;
+	double	h;
 	double	c;
 	double delta;
 
@@ -66,19 +70,19 @@ double	hits_sphere(t_ray ray, t_vars mlx, t_pos *center)
 		if (mlx.first->type == SPHERE)
 		{
 			*center = mlx.first->pos;
-			cr = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
-			a = dot_product(ray.direction, ray.direction);
-			b = -2 * dot_product(ray.direction, cr);
-			c = dot_product(cr, cr) - pow((mlx.first->sphere->diameter/2),2);
-			delta = b*b - 4 * a * c;
+			or_to_oc = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
+			a = vec_length(ray.direction) * vec_length(ray.direction);//dot_product(ray.direction, ray.direction);
+			h =  dot_product(ray.direction, or_to_oc); //-2 * dot_product(ray.direction, or_to_oc);
+			c = my_sq(vec_length(or_to_oc)) - my_sq(mlx.first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
+			delta = sqrt(my_sq(h) - a * c);
 			if (delta >= 0)
-				return ((-b - sqrt(delta))/ (2 * a));
+				return ((h - sqrt(delta))/(a));
 			else
 				return (-1);
 		}
 		mlx.first = mlx.first->next;
 	}
-	return (0);
+	return (-1);
 }
 
 int	check_meshes(t_ray ray, t_vars mlx)
@@ -96,10 +100,10 @@ int	check_meshes(t_ray ray, t_vars mlx)
 		inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, t), ADD);
 		inter_norm = vec_add_vec(inter_norm, sphere_c, MINUS);
 		inter_norm = vec_normalize(inter_norm);
-		col.x = (inter_norm.x + 1.0) * 127.5;
-		col.y = (inter_norm.y + 1.0) * 127.5;
-		col.z = (inter_norm.z + 1.0) * 127.5;
-		//printf("\n\n%d, %d, %d\n\n", col.x, col.y, col.z);
+		col.x = (int)((inter_norm.x + 1.0) * 127.5);
+		col.y = (int)((inter_norm.y + 1.0) * 127.5);
+		col.z = (int)((inter_norm.z + 1.0) * 127.5);
+		printf("\n\n%d, %d, %d\n\n", col.x, col.y, col.z);
 	}
 	else {
 		norm_v = vec_normalize(ray.direction);
@@ -154,7 +158,7 @@ void	render_image(t_vars mlx, t_data *img)
 			pixel.x = pixel_top_left.x + (img->x * pixel_delta.x);
 			pixel.y = pixel_top_left.y + (img->y * pixel_delta.y);
 			pixel.z = pixel_top_left.z;
-			ray.direction = vec_add_vec(pixel, camera->pos, MINUS);
+			ray.direction = vec_normalize(vec_add_vec(pixel, camera->pos, MINUS));
 			ray.origin = camera->pos;
 			ray_color(ray, mlx, img);
 			img->x = img->x + 1;

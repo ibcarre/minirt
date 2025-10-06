@@ -13,7 +13,7 @@ void	print_obj_param(t_obj *object)
 		printf("LIGHT RATIO: %f\n", object->light->ratio);
 		break;
 	case 2:
-		printf("DIAMETER: %f\n", object->sphere->diameter);
+		printf("RAYON: %f\n", object->sphere->rayon);
 		break;
 	case 3:
 		printf("PLANE NORMAL: %f;%f;%f\n", object->plane->normal.x, object->plane->normal.y, object->plane->normal.z);

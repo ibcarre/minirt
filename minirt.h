@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/29 15:40:22 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/06 20:54:33 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define WIDTH 720
 # define HEIGHT 480
-# define FOC 2.0
+# define FOC 90
 # define INT_MAX 0x7fffffff
 # define MINUS 0
 # define ADD 1
@@ -73,7 +73,7 @@ typedef struct s_light
 
 typedef struct s_sphere
 {
-	double		diameter;
+	double		rayon;
 } t_sphere;
 
 typedef struct s_plane

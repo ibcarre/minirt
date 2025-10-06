@@ -1,8 +1,8 @@
 NAME = minirt
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g
-LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
+CFLAGS = -Wall -Wextra -Werror -g -MMD
+LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm -I./minirt.h
 
 SRCS = main.c \
 	utils/get_next_line.c\
@@ -19,10 +19,11 @@ SRCS = main.c \
 	vector_math/vec.c\
 	vector_math/vec_on_vec.c\
 
-
 OBJ_DIR = obj
 
 OBJ = $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+DEPENDS := $(OBJ:.o=.d)
 
 MINILIBX = ./minilibx-linux/libmlx_Linux.a
 
@@ -46,3 +47,5 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+-include $(DEPENDS)

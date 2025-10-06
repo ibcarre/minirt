@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/31 13:49:22 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/06 20:46:27 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ t_obj	*fill_sphere(char *line, t_obj **obj)
 	(*obj)->sphere = malloc(sizeof(t_sphere));
 	if (!((*obj)->sphere))
 		return (free((*obj)->sphere), free(*obj), *obj = NULL);
-	(*obj)->sphere->diameter = ft_atof(&line, &works);
-	if ((*obj)->sphere->diameter < 0)
+	(*obj)->sphere->rayon = (ft_atof(&line, &works))/2;
+	if ((*obj)->sphere->rayon < 0)
 	{
 		write(2, "NEG DIAMETER\n", 13);
 		works = 0;
