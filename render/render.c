@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 15:42:56 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 18:07:51 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
 void	my_mlx_pixel_put(t_data *data, int height, int width, int color)
 {
@@ -34,17 +34,6 @@ int	handle_key(int keycode, t_vars *mlx)
 	if(keycode == XK_Escape)
 		close_window(mlx);
 	return (0);
-}
-
-t_obj	*get_camera(t_obj *obj)
-{
-	while (obj)
-	{
-		if (obj->type == CAMERA)
-			return (obj);
-		obj = obj->next;
-	}
-	return (NULL);
 }
 
 double	my_sq(double x)
@@ -92,18 +81,19 @@ int	check_meshes(t_ray ray, t_vars mlx)
 	double	t;
 	t_pos	inter_norm;
 	t_pos	sphere_c;
-	double	vec_sens;
+	//double	vec_sens;
 
 	sphere_c = vec_init(0, 0, 0); //center_sphere
 	t = hits_sphere(ray, mlx, &sphere_c);
-	if (t != -1) //pour pas obtenir les solutions derrière la caméra
+	//plus le t est petit plus il est proche y = at + b / / a => ray.dir, b => ray.origin
+	if (t >= 0) //pour pas obtenir les solutions derrière la caméra
 	{										//vec_mul ray_dir a la solution pour laquelle ray_dir touche sphere
 		inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, t), ADD); //vecteur origin rayon to point d'intersection rayon sphere
 		inter_norm = vec_add_vec(inter_norm, sphere_c, MINUS);
 		//inter_norm = vec_add_vec(sphere_c, inter_norm, ADD);
 		inter_norm = vec_normalize(inter_norm);
-		vec_sens = dot_product(inter_norm, ray.direction);
-		printf("SENS DU VECTEUR %f\n", vec_sens); //negatif quand pas meme sens et positif quand meme sens
+		//vec_sens = dot_product(inter_norm, ray.direction);
+		//printf("SENS DU VECTEUR %f\n", vec_sens); //negatif quand pas meme sens et positif quand meme sens
 		// donc negatif front face et positif backface => normal always points out
 		col.x = (int)((inter_norm.x + 1.0) * 127.5);
 		col.y = (int)((inter_norm.y + 1.0) * 127.5);
@@ -131,37 +121,22 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img)
 
 void	render_image(t_vars mlx, t_data *img)
 {
-	double		view_h;
-	double		view_w;
-	t_pos		pixel_delta;
-	t_pos		pixel_top_left;
 	t_pos		pixel;
 	t_obj		*camera;
 	t_ray		ray;
+	t_viewport	*vp;
 
 	img->x = 0;
 	img->y = 0;
-	camera = get_camera(mlx.first);
-	view_h = 15.0;
-	view_w = (view_h * (double)WIDTH/(double)HEIGHT);
-	camera->camera->foc_length = FOC;
-	camera->camera->viewport = vec_init(view_w, -view_h, -camera->camera->foc_length);
-	pixel_delta.x = camera->camera->viewport.x/(double)WIDTH;
-	pixel_delta.y = camera->camera->viewport.y/(double)HEIGHT;
-
-	//top left pixel
-	pixel_top_left.y = camera->pos.y - (camera->camera->viewport.y / 2) + (pixel_delta.y / 2);
-	pixel_top_left.x = camera->pos.x - (camera->camera->viewport.x / 2) + (pixel_delta.x / 2);
-	printf("FIRST PIXEL Y HEIGHT %f\n", pixel_top_left.y);
-	printf("FIRST PIXEL X WIDTH %f\n", pixel_top_left.x);
-	pixel_top_left.z = - (camera->camera->foc_length); // right handed orientation camera faces -z 
+	camera = camera_setup(mlx.first);
+	vp = camera->camera->viewport;
 	while (img->y < HEIGHT)
 	{
 		while (img->x < WIDTH)
 		{
-			pixel.x = pixel_top_left.x + (img->x * pixel_delta.x);
-			pixel.y = pixel_top_left.y + (img->y * pixel_delta.y);
-			pixel.z = pixel_top_left.z;
+			pixel.x = vp->pixel_top_left.x + (img->x * vp->pixel_delta.x);
+			pixel.y = vp->pixel_top_left.y + (img->y * vp->pixel_delta.y);
+			pixel.z = vp->pixel_top_left.z;
 			ray.direction = vec_normalize(vec_add_vec(pixel, camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
 			ray.origin = camera->pos;
 			ray_color(ray, mlx, img);
@@ -170,8 +145,6 @@ void	render_image(t_vars mlx, t_data *img)
 		img->x = 0;
 		img->y = img->y + 1;
 	}
-	printf("LAST PIXEL Y %f\n", pixel.y);
-	printf("LAST PIXEL X %f\n", pixel.x);
 }
 
 void	render(t_obj *first)

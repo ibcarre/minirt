@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 23:19:10 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/27 17:03:53 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 17:02:48 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
 void	free_obj_type(t_obj *obj)
 {
@@ -19,7 +19,11 @@ void	free_obj_type(t_obj *obj)
 	if (obj->amlight)
 		free(obj->amlight);
 	else if (obj->camera)
+	{
+		if (obj->camera->viewport)
+			free(obj->camera->viewport);
 		free(obj->camera);
+	}
 	else if (obj->light)
 		free(obj->light);
 	else if (obj->sphere)

@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:51 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/08/27 17:03:23 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 16:45:37 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "./includes/minirt.h"
 
 int	main(int argv, char **argc)
 {

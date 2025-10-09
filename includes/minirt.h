@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 15:43:18 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 18:35:20 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
 # define MINUS 0
 # define ADD 1
 
-# include "minilibx-linux/mlx.h"
+# include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
 # include <math.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "./utils/get_next_line.h"
+# include "../utils/get_next_line.h"
 
 typedef struct s_color
 {
@@ -58,12 +58,20 @@ typedef struct s_amlight
 	double		ratio;
 } t_amlight;
 
+typedef struct	s_viewport {
+	double		view_h;
+	double		view_w;
+	t_pos		pixel_delta;
+	t_pos		vport;
+	t_pos		pixel_top_left;
+}	t_viewport;
+
 typedef struct s_camera
 {
-	t_pos		orientation;
-	int			fov;
-	double		foc_length;
-	t_pos		viewport;
+	t_pos			orientation;
+	int				fov;
+	double			foc_length;
+	t_viewport		*viewport;
 } t_camera;
 
 typedef struct s_light
@@ -89,12 +97,6 @@ typedef struct s_cylinder
 	t_pos		normal;
 } t_cylinder;
 
-typedef	struct	s_viewport
-{
-	t_pos	view_u;
-	t_pos	view_v;
-}	t_viewport;
-
 typedef	struct	s_ray
 {
 	t_pos	origin;
@@ -110,10 +112,29 @@ typedef struct s_obj
 	t_plane			*plane;
 	t_sphere		*sphere;
 	t_light			*light;
-	t_camera		*camera;
-	t_amlight		*amlight;
+	t_camera		*camera; //pas de next => pas 2 cameras dans une scène
+	t_amlight		*amlight; //pas de next amlight non plus
 	struct s_obj	*next;
 }	t_obj;
+
+// typedef struct s_obj
+// {
+// 	t_cylinder		*cylinder; //setup as NULL si ils existent pas !!!important!!!!
+// 	t_plane			*plane;
+// 	t_sphere		*sphere;
+// 	t_light			*light;
+// 	t_camera		*camera;
+// 	t_amlight		*amlight;
+// }	t_obj;
+// typedef struct s_cylinder
+// {
+// 	t_pos			pos;
+// 	t_color			col;
+// 	double		diameter;
+// 	double		height;
+// 	t_pos		normal;
+// 	struct s_cylinder	*next;
+// } t_cylinder;
 
 typedef struct	s_data {
 	void	*img;
@@ -130,7 +151,6 @@ typedef struct	s_vars {
 	void	*win;
 	t_obj	*first;
 }	t_vars;
-
 
 void	print_obj_param(t_obj *object);
 t_obj	*parsing(int fd);
@@ -156,5 +176,9 @@ t_pos	vec_mul_vec(t_pos vec, t_pos vec2);
 double	vec_length(t_pos vec);
 t_pos	vec_normalize(t_pos vec);
 double	dot_product(t_pos vec, t_pos vec2);
+t_obj	*camera_setup(t_obj *camera);
 
 #endif
+
+//setup sphere->next => sphere 
+// camera et ambient lighting dans OBJ

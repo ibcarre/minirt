@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/06 20:46:27 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 17:06:50 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
 // void	ft_ceil(double *ratio)
 // {
@@ -111,12 +111,16 @@ t_obj	*fill_camera(char *line, t_obj **obj)
 	line = skip_spaces(&line[i]);
 	i = 1;
 	(*obj)->camera = malloc(sizeof(t_camera));
+	(*obj)->camera->viewport = NULL;
 	if (!fill_pos(*obj, &line) || !((*obj)->camera))
 		return (free(*obj), *obj = NULL);
 	if (!fill_or(&((*obj)->camera->orientation), &line))
 		return (free_objs(*obj), *obj = NULL);
 	(*obj)->camera->fov = ft_clamp(ft_atof(&line, &i), 0, 180);
 	if (!i)
+		return (free_objs(*obj), *obj = NULL);
+	(*obj)->camera->viewport = malloc(sizeof(t_viewport));
+	if (!((*obj)->camera->viewport))
 		return (free_objs(*obj), *obj = NULL);
 	return (*obj);
 }

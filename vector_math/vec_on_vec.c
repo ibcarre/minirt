@@ -6,11 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 14:30:26 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/09/16 15:37:21 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 16:32:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "../includes/minirt.h"
 
 t_pos	vec_div_vec(t_pos vec, t_pos vec2)
 {
