@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/06 20:57:55 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 15:42:56 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ double	hits_sphere(t_ray ray, t_vars mlx, t_pos *center)
 			c = my_sq(vec_length(or_to_oc)) - my_sq(mlx.first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
 			delta = sqrt(my_sq(h) - a * c);
 			if (delta >= 0)
-				return ((h - sqrt(delta))/(a));
+				return ((h - sqrt(delta))/(a)); // moins pour obtenir la solution la plus proche de la caméra, return negatif quand on est dans la sphère (forcément...)
 			else
 				return (-1);
 		}
@@ -92,18 +92,22 @@ int	check_meshes(t_ray ray, t_vars mlx)
 	double	t;
 	t_pos	inter_norm;
 	t_pos	sphere_c;
+	double	vec_sens;
 
 	sphere_c = vec_init(0, 0, 0); //center_sphere
 	t = hits_sphere(ray, mlx, &sphere_c);
-	if (t > 0.0)
-	{
-		inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, t), ADD);
+	if (t != -1) //pour pas obtenir les solutions derrière la caméra
+	{										//vec_mul ray_dir a la solution pour laquelle ray_dir touche sphere
+		inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, t), ADD); //vecteur origin rayon to point d'intersection rayon sphere
 		inter_norm = vec_add_vec(inter_norm, sphere_c, MINUS);
+		//inter_norm = vec_add_vec(sphere_c, inter_norm, ADD);
 		inter_norm = vec_normalize(inter_norm);
+		vec_sens = dot_product(inter_norm, ray.direction);
+		printf("SENS DU VECTEUR %f\n", vec_sens); //negatif quand pas meme sens et positif quand meme sens
+		// donc negatif front face et positif backface => normal always points out
 		col.x = (int)((inter_norm.x + 1.0) * 127.5);
 		col.y = (int)((inter_norm.y + 1.0) * 127.5);
 		col.z = (int)((inter_norm.z + 1.0) * 127.5);
-		printf("\n\n%d, %d, %d\n\n", col.x, col.y, col.z);
 	}
 	else {
 		norm_v = vec_normalize(ray.direction);
@@ -158,7 +162,7 @@ void	render_image(t_vars mlx, t_data *img)
 			pixel.x = pixel_top_left.x + (img->x * pixel_delta.x);
 			pixel.y = pixel_top_left.y + (img->y * pixel_delta.y);
 			pixel.z = pixel_top_left.z;
-			ray.direction = vec_normalize(vec_add_vec(pixel, camera->pos, MINUS));
+			ray.direction = vec_normalize(vec_add_vec(pixel, camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
 			ray.origin = camera->pos;
 			ray_color(ray, mlx, img);
 			img->x = img->x + 1;

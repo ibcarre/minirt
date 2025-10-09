@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/06 20:54:33 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/09 15:43:18 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_light
 typedef struct s_sphere
 {
 	double		rayon;
+	int			backface;
 } t_sphere;
 
 typedef struct s_plane
