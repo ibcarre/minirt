@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 18:35:20 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/15 18:05:30 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # define WIDTH 720
 # define HEIGHT 480
 # define FOC 90
-# define INT_MAX 0x7fffffff
 # define MINUS 0
 # define ADD 1
+# define SAMPLES 5
 
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
@@ -26,6 +26,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <limits.h>
 # include <unistd.h>
 # include "../utils/get_next_line.h"
 
@@ -150,6 +151,7 @@ typedef struct	s_vars {
 	void	*mlx;
 	void	*win;
 	t_obj	*first;
+	t_obj	*camera;
 }	t_vars;
 
 void	print_obj_param(t_obj *object);
@@ -177,6 +179,11 @@ double	vec_length(t_pos vec);
 t_pos	vec_normalize(t_pos vec);
 double	dot_product(t_pos vec, t_pos vec2);
 t_obj	*camera_setup(t_obj *camera);
+double	rand_min_max(int seed, int min, int max);
+double myrand(int seed);
+t_color	col_init(int x, int y, int z);
+t_color	col_add_col(t_color col, t_color color);
+double	vec_length_squared(t_pos vec);
 
 #endif
 

@@ -6,30 +6,19 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 16:32:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/10 16:11:21 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void	check_col(t_obj *obj)
+int	check_col(t_obj *obj)
 {
 	if (obj->col.x < 0 || obj->col.y < 0 || obj->col.z < 0)
-		printf("COLOR VALUES LOWER THAN 0 CLAMPED TO 0");
+		return (0);
 	if (obj->col.x > 255 || obj->col.y > 255 || obj->col.z > 255)
-		printf("COLOR VALUES HIGHER THAN 255 CLAMPED TO 255");
-	if (obj->col.x < 0)
-		obj->col.x = 0;
-	if (obj->col.y < 0)
-		obj->col.y = 0;
-	if (obj->col.z < 0)
-		obj->col.z = 0;
-	if (obj->col.x > 255)
-		obj->col.x = 255;
-	if (obj->col.y > 255)
-		obj->col.y = 255;
-	if (obj->col.z > 255)
-		obj->col.z = 255;
+		return (0);
+	return (1);
 }
 
 int	fill_col(t_obj *obj, char **line)
@@ -53,8 +42,7 @@ int	fill_col(t_obj *obj, char **line)
 	(obj)->col.y = ft_atoi(line);
 	i = 1;
 	(obj)->col.z = ft_atoi(line);
-	check_col(obj);
-	return (1);
+	return (check_col(obj));
 }
 
 int	fill_pos(t_obj *obj, char **line)

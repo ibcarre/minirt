@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 14:30:26 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 16:32:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/15 17:46:27 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,15 @@ double	vec_length(t_pos vec)
 
 	res = pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2);
 	res = sqrt(res);
+	return (res);
+}
+
+//permet d'obtenir la range de la magnitude quand la racine carrée n'est pas utile
+double	vec_length_squared(t_pos vec)
+{
+	double	res;
+
+	res = pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2);
 	return (res);
 }
 
