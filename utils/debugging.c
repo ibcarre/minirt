@@ -38,3 +38,8 @@ void	print_obj_param(t_obj *object)
 	object = object->next;
 	}
 }
+
+void	print_vec(char *s, t_pos vec)
+{
+	printf("%s : x %f, y %f, z %f\n", s, vec.x, vec.y, vec.z);
+}

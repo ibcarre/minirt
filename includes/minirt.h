@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/15 18:05:30 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/19 18:03:22 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,14 @@ typedef struct s_obj
 	struct s_obj	*next;
 }	t_obj;
 
+typedef struct	s_hit
+{
+	double	point;
+	t_pos	closest_pt;
+	int		hit;
+	t_color	col;
+}	t_hit;
+
 // typedef struct s_obj
 // {
 // 	t_cylinder		*cylinder; //setup as NULL si ils existent pas !!!important!!!!
@@ -184,6 +192,9 @@ double myrand(int seed);
 t_color	col_init(int x, int y, int z);
 t_color	col_add_col(t_color col, t_color color);
 double	vec_length_squared(t_pos vec);
+t_pos	random_unit_vec_dir(int	seed, t_pos dir);
+t_color col_mul(t_color col, double x);
+void	print_vec(char *s, t_pos vec);
 
 #endif
 

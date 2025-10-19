@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 17:37:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/15 17:41:10 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/19 12:25:15 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,15 @@ t_color	col_add_col(t_color col, t_color color)
 	res.x = col.x + color.x;
 	res.y = col.y + color.y;
 	res.z = col.z + color.z;
+	return (res);
+}
+
+t_color col_mul(t_color col, double x)
+{
+	t_color	res;
+
+	res.x = col.x * x;
+	res.y = col.y * x;
+	res.z = col.z * x;
 	return (res);
 }

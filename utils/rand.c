@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 12:47:23 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/16 16:11:57 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/19 17:22:41 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ t_pos	random_vec(int seed)
 	t_pos	vec;
 
 	vec.x = myrand(seed);
-	vec.y = myrand(seed);
-	vec.z = myrand(seed);
+	vec.y = myrand(seed*2);
+	vec.z = myrand(seed*3);
+	//print_vec("VECTEUR", vec);
 	return (vec);
 }
 
