@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 07:04:48 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 11:36:00 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,10 @@ t_hit	loop_objects(t_ray ray, t_vars mlx, t_hit *point)
 				point->closest_pt.z = point->point;
 				point->col = mlx.first->col;
 				point->hit = 1;
-				get_normal(mlx, point, ray);
-				//printf("%f\n", point.normal.x);
+				if (mlx.first->type == SPHERE)
+					get_normal(mlx, point, ray);
+				//printf("%f %f %f \n", point->normal.x, point->normal.y, point->normal.z);
+				//printf("%f\n", point->normal.z);
 			}
 		}
 		mlx.first = mlx.first->next;
@@ -114,7 +116,7 @@ t_hit	loop_objects(t_ray ray, t_vars mlx, t_hit *point)
 	return (*point);
 }
 
-t_color	check_meshes(t_ray ray, t_vars mlx, int idx)
+t_color	check_meshes(t_ray ray, t_vars mlx)
 {
 	t_color col;
 	t_hit	point;
@@ -122,15 +124,15 @@ t_color	check_meshes(t_ray ray, t_vars mlx, int idx)
 
 	// if (idx > 5)
 	// 	return (col_init(255, 255, 255));
-	(void)idx;
 	loop_objects(ray, mlx, &point);
 	col = col_mul(mlx.am_light->col, 0.8);
 	if (point.hit)
 	{
+		//printf("%f\n", point.normal.x);
 		t_pos	lumiere = vec_init(0.0,0,-10);
 		double	am_col = mlx.am_light->amlight->ratio;
 		t_color	am = mlx.am_light->col;
-		ray.origin = point.closest_pt;
+		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
 		ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
 		loop_objects(ray, mlx, &point);
 		if (!point.hit)
@@ -165,7 +167,7 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 		px.y = camera->camera->viewport->pixel_top_left.y + ((img->y + (myrand(px.y + i) - 0.5)) * camera->camera->viewport->pixel_delta.y);
 		ray.direction = vec_normalize(vec_add_vec(px, mlx.camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
 		ray.origin = mlx.camera->pos;
-		col = col_add_col(check_meshes(ray, mlx, 1), col);
+		col = col_add_col(check_meshes(ray, mlx), col);
 		i++;
 	}
 	col.x = (int)ft_clamp((col.x/SAMPLES), 0, 255);

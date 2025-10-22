@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 23:19:10 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/15 15:15:50 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 11:08:47 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,3 +49,9 @@ void	free_objs(t_obj *obj)
 	free(obj);
 }
 
+double	abs_f(double x)
+{
+	if (x < 0)
+		return (-x);
+	return (x);
+}
