@@ -6,9 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/19 17:56:39 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 04:24:30 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//sp 0,-50.5,-100 100 10,0,255
 
 #include "../includes/minirt.h"
 
@@ -46,7 +48,7 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-double	hits_sphere(t_ray ray, t_vars mlx, t_pos *center)
+double	hits_sphere(t_ray ray, t_vars mlx)
 {
 	t_pos	or_to_oc; //rayon to centre
 	double	a;
@@ -54,122 +56,97 @@ double	hits_sphere(t_ray ray, t_vars mlx, t_pos *center)
 	double	c;
 	double delta;
 
-	while (mlx.first)
+	or_to_oc = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
+	a = vec_length(ray.direction) * vec_length(ray.direction);//dot_product(ray.direction, ray.direction);
+	h =  dot_product(ray.direction, or_to_oc); //-2 * dot_product(ray.direction, or_to_oc);
+	c = my_sq(vec_length(or_to_oc)) - my_sq(mlx.first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
+	delta = h * h - a * c;
+	if (delta >= 0)
 	{
-		if (mlx.first->type == SPHERE)
+		delta = (h - sqrt(delta))/(a);
+		if (delta < 0)
 		{
-			*center = mlx.first->pos;
-			or_to_oc = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
-			a = vec_length(ray.direction) * vec_length(ray.direction);//dot_product(ray.direction, ray.direction);
-			h =  dot_product(ray.direction, or_to_oc); //-2 * dot_product(ray.direction, or_to_oc);
-			c = my_sq(vec_length(or_to_oc)) - my_sq(mlx.first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
-			delta = sqrt(my_sq(h) - a * c);
-			if (delta >= 0)
-				return ((h - sqrt(delta))/(a)); // moins pour obtenir la solution la plus proche de la caméra, return negatif quand on est dans la sphère (forcément...)
-			else
-				return (-1);
+			delta = (h + sqrt(h * h - a * c))/a;
+			return (delta);
 		}
-		mlx.first = mlx.first->next;
+		return (delta); // moins pour obtenir la solution la plus proche de la caméra, return negatif quand on est dans la sphère (forcément...)
 	}
 	return (-1);
 }
 
-t_color	check_meshes(t_ray ray, t_vars mlx, t_pos px, int height, int idx)
+t_pos	get_normal(t_vars mlx, t_hit point, t_ray ray)
 {
-	//t_pos	norm_v;
-	t_color col;
-	t_hit	point;
-	t_pos	inter_norm;
-	t_obj	*first;
-	t_pos	sphere_c;
+	t_pos	normal;
+	t_pos	t_point;
 
-	first = mlx.first;
+	t_point = vec_add_vec(ray.origin, vec_mul(ray.direction, point.closest_pt.z), ADD);
+	if (!mlx.first)
+		return (vec_init(0,0,0));
+	else if (mlx.first->type == SPHERE)
+		normal = vec_normalize(vec_add_vec(t_point, mlx.first->pos, MINUS));
+	return (normal);
+}
+
+t_hit	loop_objects(t_ray ray, t_vars mlx)
+{
+	t_hit	point;
+
 	point.hit = 0;
-	if (idx > 5)
-		return (col_init(255, 255, 255));
+	point.closest_pt.z = -1;
+	point.point = -1;
 	while (mlx.first)
 	{
 		if (mlx.first->type == SPHERE)
+			point.point = hits_sphere(ray, mlx);
+		if (point.point >= 0)
 		{
-			point.point = hits_sphere(ray, mlx, &sphere_c);
- 			if (point.point >= 0)
+			if (point.hit == 0 || point.point < point.closest_pt.z)
 			{
-				if (point.hit == 0)
-				{
-					point.hit = 1;
-					point.closest_pt = vec_init(0, 0, point.point);
-					point.col = mlx.first->col;
-				}
-				if (point.point < point.closest_pt.z)
-				{
-					point.closest_pt = vec_init(px.x, px.y, point.point);
-					point.col = mlx.first->col;
-				}
+				point.closest_pt.z = point.point;
+				point.col = mlx.first->col;
+				point.hit = 1;
+				point.normal = get_normal(mlx, point, ray);
+				//printf("%f\n", point.normal.x);
 			}
 		}
 		mlx.first = mlx.first->next;
 	}
+	point.closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point.closest_pt.z), ADD);
+	return (point);
+}
+
+t_color	check_meshes(t_ray ray, t_vars mlx, int idx)
+{
+	t_color col;
+	t_hit	point;
+
+	if (idx > 5)
+		return (col_init(255, 255, 255));
+	point = loop_objects(ray, mlx);
+	col = col_init(255,255,255);
 	if (point.hit)
 	{
-		point.closest_pt = vec_mul(ray.direction, point.closest_pt.z);
-	//	printf("CLOSEST PT X %f Y %f Z %f\n", point.closest_pt.x, point.closest_pt.y, point.closest_pt.z);
-	 	inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, point.closest_pt.z), ADD); //vecteur origin rayon to point d'intersection rayon sphere
-	 	inter_norm = vec_add_vec(inter_norm, sphere_c, MINUS);
-	 	inter_norm = vec_add_vec(sphere_c, inter_norm, ADD);
-	 	inter_norm = vec_normalize(inter_norm);
-		t_pos random_dir = random_unit_vec_dir(point.closest_pt.y * 1000, inter_norm);
-		//printf("qsdqsdq %f\n", point.closest_pt.y * 1000);
-		col.x = point.col.x;
-		col.y = point.col.y;
-		col.z = point.col.z;
-		ray.origin = point.closest_pt;
-		ray.direction = random_dir;
-		mlx.first = first;
-		//print_vec("ray dir", ray.direction);
-		//return (col);
-		return (col_mul(check_meshes(ray, mlx, px, height, idx++), 0.5));
+		t_pos	lumiere = vec_init(0.0,0.0,-29.0);
+		double	am_col = 0.3;
+		t_color	am = col_init(255, 0, 0);
+		double intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 15000;
+		intensite = intensite / (vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)) * vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)));
+		// col.x = (int)((point.normal.x + 1.0) * 127.5);
+		// col.y = (int)((point.normal.y + 1.0) * 127.5);
+		// col.z = (int)((point.normal.z + 1.0) * 127.5);
+		col.x = intensite * point.col.x/255 + am.x * am_col;
+		col.y = intensite * point.col.y/255 + am.y * am_col;
+		col.z = intensite * point.col.z/255 + am.z * am_col;
+		return(col);
 	}
-	else {
-	 	// norm_v = vec_normalize(ray.direction);
-	 	// float a = 0.5 * (norm_v.y + 1);
-	 	// col.x = (((1 - a) + (a * 0.5)) * 255);
-	 	// col.y = (((1 - a) + (a * 0.7)) * 255);
-	 	// col.z = (((1 - a) + (a * 1)) * 255);
-		col.x = 255;
-		col.y = 255;
-		col.z = 255;
-	}
-	// sphere_c = vec_init(0, 0, 0); //center_sphere
-	// t = hits_sphere(ray, mlx, &sphere_c);
-	// //plus le t est petit plus il est proche y = at + b / / a => ray.dir, b => ray.origin
-	// if (t >= 0) //pour pas obtenir les solutions derrière la caméra
-	// {										//vec_mul ray_dir a la solution pour laquelle ray_dir touche sphere
-	// 	inter_norm = vec_add_vec(ray.origin, vec_mul(ray.direction, t), ADD); //vecteur origin rayon to point d'intersection rayon sphere
-	// 	inter_norm = vec_add_vec(inter_norm, sphere_c, MINUS);
-	// 	//inter_norm = vec_add_vec(sphere_c, inter_norm, ADD);
-	// 	inter_norm = vec_normalize(inter_norm);
-	// 	//vec_sens = dot_product(inter_norm, ray.direction);
-	// 	//printf("SENS DU VECTEUR %f\n", vec_sens); //negatif quand pas meme sens et positif quand meme sens
-	// 	// donc negatif front face et positif backface => normal always points out
-	// 	col.x = (int)((inter_norm.x + 1.0) * 127.5);
-	// 	col.y = (int)((inter_norm.y + 1.0) * 127.5);
-	// 	col.z = (int)((inter_norm.z + 1.0) * 127.5);
-	// }
-	// else {
-	// 	norm_v = vec_normalize(ray.direction);
-	// 	float a = 0.5 * (norm_v.y + 1);
-	// 	col.x = (((1 - a) + (a * 0.5)) * 255);
-	// 	col.y = (((1 - a) + (a * 0.7)) * 255);
-	// 	col.z = (((1 - a) + (a * 1)) * 255);
-	// }
 	return (col);
 }
 
 void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 {
 	t_color		col;
-	int	i;
 	t_obj	*camera;
+	int	i;
 
 	i = 0;
 	camera = mlx.camera;
@@ -180,8 +157,7 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 		px.y = camera->camera->viewport->pixel_top_left.y + ((img->y + (myrand(px.y + i) - 0.5)) * camera->camera->viewport->pixel_delta.y);
 		ray.direction = vec_normalize(vec_add_vec(px, mlx.camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
 		ray.origin = mlx.camera->pos;
-		col = col_add_col(check_meshes(ray, mlx, px, img->y, 1), col);
-		//printf("SAMPLE %i : COL %i %i %i\n", i, col.x, col.y, col.z);
+		col = col_add_col(check_meshes(ray, mlx, 1), col);
 		i++;
 	}
 	col.x = (int)ft_clamp((col.x/SAMPLES), 0, 255);
@@ -203,6 +179,7 @@ void	render_image(t_vars mlx, t_data *img)
 	img->y = 0;
 	camera = camera_setup(mlx.first);
 	mlx.camera = camera;
+	mlx.am_light = get_amlight(mlx);
 	vp = camera->camera->viewport;
 	while (img->y < HEIGHT)
 	{

@@ -21,6 +21,7 @@ SRCS = main.c \
 	render/camera.c\
 	utils/rand.c\
 	vector_math/color.c\
+	render/render_utils.c\
 
 OBJ_DIR = obj
 

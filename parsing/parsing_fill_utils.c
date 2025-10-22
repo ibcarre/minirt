@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/10 16:11:21 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 02:52:56 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,9 @@ int	fill_pos(t_obj *obj, char **line)
 double ft_clamp(double nb, double min, double max)
 {
 	if (nb < min)
-	{
 		nb = min;
-		printf("WAR : number too low clamped to min %f\n", min);
-	}
 	else if (nb > max)
-	{
-		printf("WAR : number too high clamped to max %f\n", max);
 		nb = max;
-	}
 	return (nb);
 }
 

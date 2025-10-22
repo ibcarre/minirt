@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/19 18:03:22 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 04:23:48 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 # define WIDTH 720
 # define HEIGHT 480
-# define FOC 90
 # define MINUS 0
 # define ADD 1
 # define SAMPLES 5
+# define M_PI 3.14159265358979323846
 
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
@@ -71,7 +71,6 @@ typedef struct s_camera
 {
 	t_pos			orientation;
 	int				fov;
-	double			foc_length;
 	t_viewport		*viewport;
 } t_camera;
 
@@ -124,6 +123,7 @@ typedef struct	s_hit
 	t_pos	closest_pt;
 	int		hit;
 	t_color	col;
+	t_pos	normal;
 }	t_hit;
 
 // typedef struct s_obj
@@ -160,6 +160,7 @@ typedef struct	s_vars {
 	void	*win;
 	t_obj	*first;
 	t_obj	*camera;
+	t_obj	*am_light;
 }	t_vars;
 
 void	print_obj_param(t_obj *object);
@@ -195,6 +196,7 @@ double	vec_length_squared(t_pos vec);
 t_pos	random_unit_vec_dir(int	seed, t_pos dir);
 t_color col_mul(t_color col, double x);
 void	print_vec(char *s, t_pos vec);
+t_obj	*get_amlight(t_vars mlx);
 
 #endif
 
