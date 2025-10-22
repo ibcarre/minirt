@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 04:24:30 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 04:30:37 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,20 +120,18 @@ t_color	check_meshes(t_ray ray, t_vars mlx, int idx)
 	t_color col;
 	t_hit	point;
 
-	if (idx > 5)
-		return (col_init(255, 255, 255));
+	// if (idx > 5)
+	// 	return (col_init(255, 255, 255));
+	(void)idx;
 	point = loop_objects(ray, mlx);
-	col = col_init(255,255,255);
+	col = col_mul(mlx.am_light->col, 0.8);
 	if (point.hit)
 	{
 		t_pos	lumiere = vec_init(0.0,0.0,-29.0);
-		double	am_col = 0.3;
-		t_color	am = col_init(255, 0, 0);
+		double	am_col = mlx.am_light->amlight->ratio;
+		t_color	am = mlx.am_light->col;
 		double intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 15000;
 		intensite = intensite / (vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)) * vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)));
-		// col.x = (int)((point.normal.x + 1.0) * 127.5);
-		// col.y = (int)((point.normal.y + 1.0) * 127.5);
-		// col.z = (int)((point.normal.z + 1.0) * 127.5);
 		col.x = intensite * point.col.x/255 + am.x * am_col;
 		col.y = intensite * point.col.y/255 + am.y * am_col;
 		col.z = intensite * point.col.z/255 + am.z * am_col;
