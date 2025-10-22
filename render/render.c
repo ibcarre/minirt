@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 04:55:32 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/22 07:04:48 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,66 +74,74 @@ double	hits_sphere(t_ray ray, t_vars mlx)
 	return (-1);
 }
 
-t_pos	get_normal(t_vars mlx, t_hit point, t_ray ray)
+t_pos	get_normal(t_vars mlx, t_hit *point, t_ray ray)
 {
 	t_pos	normal;
 	t_pos	t_point;
 
-	t_point = vec_add_vec(ray.origin, vec_mul(ray.direction, point.closest_pt.z), ADD);
+	t_point = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
 	if (!mlx.first)
 		return (vec_init(0,0,0));
 	else if (mlx.first->type == SPHERE)
 		normal = vec_normalize(vec_add_vec(t_point, mlx.first->pos, MINUS));
+	point->normal = normal;
 	return (normal);
 }
 
-t_hit	loop_objects(t_ray ray, t_vars mlx)
+t_hit	loop_objects(t_ray ray, t_vars mlx, t_hit *point)
 {
-	t_hit	point;
-
-	point.hit = 0;
-	point.closest_pt.z = -1;
-	point.point = -1;
+	point->hit = 0;
+	point->closest_pt.z = -1;
+	point->point = -1;
 	while (mlx.first)
 	{
 		if (mlx.first->type == SPHERE)
-			point.point = hits_sphere(ray, mlx);
-		if (point.point >= 0)
+			point->point = hits_sphere(ray, mlx);
+		if (point->point >= 0)
 		{
-			if (point.hit == 0 || point.point < point.closest_pt.z)
+			if (point->hit == 0 || point->point < point->closest_pt.z)
 			{
-				point.closest_pt.z = point.point;
-				point.col = mlx.first->col;
-				point.hit = 1;
-				point.normal = get_normal(mlx, point, ray);
+				point->closest_pt.z = point->point;
+				point->col = mlx.first->col;
+				point->hit = 1;
+				get_normal(mlx, point, ray);
 				//printf("%f\n", point.normal.x);
 			}
 		}
 		mlx.first = mlx.first->next;
 	}
-	point.closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point.closest_pt.z), ADD);
-	return (point);
+	point->closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
+	return (*point);
 }
 
 t_color	check_meshes(t_ray ray, t_vars mlx, int idx)
 {
 	t_color col;
 	t_hit	point;
+	double	intensite;
 
 	// if (idx > 5)
 	// 	return (col_init(255, 255, 255));
 	(void)idx;
-	point = loop_objects(ray, mlx);
+	loop_objects(ray, mlx, &point);
 	col = col_mul(mlx.am_light->col, 0.8);
 	if (point.hit)
 	{
-		t_pos	lumiere = vec_init(0.0,0.0,0);
+		t_pos	lumiere = vec_init(0.0,0,-10);
 		double	am_col = mlx.am_light->amlight->ratio;
 		t_color	am = mlx.am_light->col;
-		double intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 2500;
-		intensite = intensite / (vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)) * vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)));
+		ray.origin = point.closest_pt;
+		ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
+		loop_objects(ray, mlx, &point);
+		if (!point.hit)
+		{
+			intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
+			intensite = intensite / (vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)) * vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)));
+		}
+		else
+			intensite = 0;
 		//printf("%f\n", intensite);
-		t_color lumcol = col_mul(col_init(0,0,255), intensite * 1);
+		t_color lumcol = col_mul(col_init(0,0,255), intensite * 0.5);
 		col.x = lumcol.x * point.col.x/255 + am.x * am_col;
 		col.y = lumcol.y * point.col.y/255 + am.y * am_col;
 		col.z = lumcol.z * point.col.z/255 + am.z * am_col;
