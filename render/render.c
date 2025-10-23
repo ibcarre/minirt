@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 11:36:00 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/23 13:08:55 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-double	hits_sphere(t_ray ray, t_vars mlx)
+double	hits_sphere(t_ray ray, t_obj *first)
 {
 	t_pos	or_to_oc; //rayon to centre
 	double	a;
@@ -56,10 +56,10 @@ double	hits_sphere(t_ray ray, t_vars mlx)
 	double	c;
 	double delta;
 
-	or_to_oc = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
+	or_to_oc = vec_add_vec(first->pos, ray.origin, MINUS);
 	a = vec_length(ray.direction) * vec_length(ray.direction);//dot_product(ray.direction, ray.direction);
 	h =  dot_product(ray.direction, or_to_oc); //-2 * dot_product(ray.direction, or_to_oc);
-	c = my_sq(vec_length(or_to_oc)) - my_sq(mlx.first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
+	c = my_sq(vec_length(or_to_oc)) - my_sq(first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
 	delta = h * h - a * c;
 	if (delta >= 0)
 	{
@@ -74,43 +74,65 @@ double	hits_sphere(t_ray ray, t_vars mlx)
 	return (-1);
 }
 
-t_pos	get_normal(t_vars mlx, t_hit *point, t_ray ray)
+t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 {
 	t_pos	normal;
 	t_pos	t_point;
 
 	t_point = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
-	if (!mlx.first)
+	if (!first)
 		return (vec_init(0,0,0));
-	else if (mlx.first->type == SPHERE)
-		normal = vec_normalize(vec_add_vec(t_point, mlx.first->pos, MINUS));
+	else if (first->type == SPHERE)
+		normal = vec_normalize(vec_add_vec(t_point, first->pos, MINUS));
+	else if (first->type == PLANE)
+		normal = first->plane->normal;
 	point->normal = normal;
 	return (normal);
 }
 
-t_hit	loop_objects(t_ray ray, t_vars mlx, t_hit *point)
+double	hits_plane(t_ray ray, t_obj *first)
+{
+	double	denom;
+	t_pos	point;
+	double	t;
+
+	denom = dot_product(first->plane->normal, ray.direction);
+	if (abs_f(denom) > 1e-6)
+	{
+		point = vec_add_vec(first->pos, ray.origin, MINUS);
+		t = dot_product(point, first->plane->normal)/denom;
+		if (t > 1e-6)
+			return (t);
+		return (-1);
+	}
+	return (-1);
+}
+
+t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 {
 	point->hit = 0;
 	point->closest_pt.z = -1;
 	point->point = -1;
-	while (mlx.first)
+	while (first)
 	{
-		if (mlx.first->type == SPHERE)
-			point->point = hits_sphere(ray, mlx);
+		if (first->type == SPHERE)
+			point->point = hits_sphere(ray, first);
+		else if (first->type == PLANE)
+			point->point = hits_plane(ray, first);
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
 			{
 				point->closest_pt.z = point->point;
-				point->col = mlx.first->col;
+				point->col = first->col;
 				point->hit = 1;
-				if (mlx.first->type == SPHERE)
-					get_normal(mlx, point, ray);
+				get_normal(first, point, ray);
 				//printf("%f %f %f \n", point->normal.x, point->normal.y, point->normal.z);
 				//printf("%f\n", point->normal.z);
 			}
+			point->point = -1;
 		}
-		mlx.first = mlx.first->next;
+		first = first->next;
 	}
 	point->closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
 	return (*point);
@@ -120,37 +142,45 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 {
 	t_color col;
 	t_hit	point;
+	t_hit	shadow;
 	double	intensite;
 
 	// if (idx > 5)
 	// 	return (col_init(255, 255, 255));
-	loop_objects(ray, mlx, &point);
+	loop_objects(ray, mlx.first, &point);
 	col = col_mul(mlx.am_light->col, 0.8);
 	if (point.hit)
 	{
+		//return(point.col);
 		//printf("%f\n", point.normal.x);
 		t_pos	lumiere = vec_init(0.0,0,-10);
 		double	am_col = mlx.am_light->amlight->ratio;
 		t_color	am = mlx.am_light->col;
 		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
 		ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
-		loop_objects(ray, mlx, &point);
-		if (!point.hit)
+		loop_objects(ray, mlx.first, &shadow);
+		if (!(shadow.hit))
 		{
 			intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
 			intensite = intensite / (vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)) * vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)));
+			intensite = 1;
 		}
 		else
-			intensite = 0;
+			intensite = 0.3;
 		//printf("%f\n", intensite);
-		t_color lumcol = col_mul(col_init(0,0,255), intensite * 0.5);
-		col.x = lumcol.x * point.col.x/255 + am.x * am_col;
-		col.y = lumcol.y * point.col.y/255 + am.y * am_col;
-		col.z = lumcol.z * point.col.z/255 + am.z * am_col;
+		// t_color lumcol = col_mul(col_init(0,0,255), intensite * 0.5);
+		// col.x = point.col.x/255 + am.x * am_col;
+		// col.y = lumcol.y * point.col.y/255 + am.y * am_col;
+		// col.z = lumcol.z * point.col.z/255 + am.z * am_col;
+		col.x = (point.col.x + am.x * am_col) * intensite;
+		col.y = (point.col.y + am.y * am_col) * intensite;
+		col.z = (point.col.z + am.z * am_col) * intensite;
 		return(col);
 	}
 	return (col);
 }
+
+//refaire ambient light et light handling
 
 void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 {
