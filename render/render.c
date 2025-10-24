@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/23 13:08:55 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/24 23:02:37 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,37 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 	return (*point);
 }
 
+
+t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *point, double	length)
+{
+	double	length_hit;
+	point->hit = 0;
+	point->closest_pt.z = -1;
+	point->point = -1;
+
+	while (first)
+	{
+		if (first->type == SPHERE)
+			point->point = hits_sphere(ray, first);
+		else if (first->type == PLANE)
+			point->point = hits_plane(ray, first);
+		if (point->point >= 0)
+		{	
+			point->closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point->point), ADD);
+			length_hit = vec_length_squared(point->closest_pt);
+			//printf("ray origin %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
+			//printf("point %f %f %f\n", point->closest_pt.x, point->closest_pt.y, point->closest_pt.z);
+			if (length_hit < length)
+			{
+				return (point->hit = 1, *point);
+			}
+			point->point = -1;
+		}
+		first = first->next;
+	}
+	return (*point);
+}
+
 t_color	check_meshes(t_ray ray, t_vars mlx)
 {
 	t_color col;
@@ -153,34 +184,35 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 	{
 		//return(point.col);
 		//printf("%f\n", point.normal.x);
-		t_pos	lumiere = vec_init(0.0,0,-10);
+		t_pos	lumiere = vec_init(0.0,0,15);
 		double	am_col = mlx.am_light->amlight->ratio;
 		t_color	am = mlx.am_light->col;
 		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
 		ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
-		loop_objects(ray, mlx.first, &shadow);
-		if (!(shadow.hit))
-		{
-			intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
-			intensite = intensite / (vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)) * vec_length(vec_add_vec(lumiere, point.closest_pt, MINUS)));
-			intensite = 1;
-		}
-		else
-			intensite = 0.3;
+		check_shadow(ray, mlx.first, &shadow, vec_length_squared(vec_add_vec(ray.direction, ray.origin, MINUS)));
+		intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
+		intensite = intensite / vec_length_squared(vec_add_vec(lumiere, point.closest_pt, MINUS));
 		//printf("%f\n", intensite);
-		// t_color lumcol = col_mul(col_init(0,0,255), intensite * 0.5);
-		// col.x = point.col.x/255 + am.x * am_col;
-		// col.y = lumcol.y * point.col.y/255 + am.y * am_col;
-		// col.z = lumcol.z * point.col.z/255 + am.z * am_col;
-		col.x = (point.col.x + am.x * am_col) * intensite;
-		col.y = (point.col.y + am.y * am_col) * intensite;
-		col.z = (point.col.z + am.z * am_col) * intensite;
+		//return(col_init(255,255,255));
+		//printf("%f\n", intensite);
+		t_color lumcol = col_mul(col_init(0,0,255), intensite * 0.5);
+		if (shadow.hit)
+		{
+			col.x = ((lumcol.x + point.col.x)/2 + am.x * am_col) * 0.7;
+			col.y = ((lumcol.y + point.col.y)/2 + am.y * am_col) * 0.7;
+			col.z = ((lumcol.z + point.col.z)/2 + am.z * am_col) * 0.7;
+			return(col);
+		}
+		col.x = (lumcol.x + point.col.x)/2 + am.x * am_col;
+		col.y = (lumcol.y + point.col.y)/2 + am.y * am_col;
+		col.z = (lumcol.z + point.col.z)/2 + am.z * am_col;
+		// col.x = (point.col.x + am.x * am_col) * intensite;
+		// col.y = (point.col.y + am.y * am_col) * intensite;
+		// col.z = (point.col.z + am.z * am_col) * intensite;
 		return(col);
 	}
 	return (col);
 }
-
-//refaire ambient light et light handling
 
 void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 {

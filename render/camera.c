@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:29:29 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 05:28:34 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/24 17:27:26 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ t_viewport	*viewport_init(t_camera *cam)
 	// vp->vport = vec_init(view_w, -view_h, view_z);
 	view_w = 5.0;
 	view_h = view_w * (double)HEIGHT/(double)WIDTH;
-	view_z = - view_w/(2 * (double)tan((double)cam->fov / 2 * M_PI/180));
-	vp->vport = vec_init(view_w, -view_h, view_z);
+	// view_z = - view_w/(2 * (double)tan((double)cam->fov / 2 * M_PI/180));
+	view_z = view_w / tan(((double)cam->fov * M_PI/180)/2);
+	printf("Focal length : %f\n", view_z);
+	vp->vport = vec_init(view_w, -view_h, - view_z);
 	return (vp);
 }
 
