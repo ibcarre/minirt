@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/25 13:58:12 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/25 21:43:27 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,12 @@ t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 	else if (first->type == SPHERE)
 		normal = vec_normalize(vec_add_vec(t_point, first->pos, MINUS));
 	else if (first->type == PLANE)
-		normal = first->plane->normal;
+	{
+		if (dot_product(ray.direction, first->plane->normal) > 0)
+			normal = vec_init(-first->plane->normal.x, -first->plane->normal.y, -first->plane->normal.z);
+		else
+			normal = first->plane->normal;
+	}
 	point->normal = normal;
 	return (normal);
 }
@@ -123,12 +128,11 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
 			{
+				point->type = first->type;
 				point->closest_pt.z = point->point;
 				point->col = first->col;
 				point->hit = 1;
 				get_normal(first, point, ray);
-				//printf("%f %f %f \n", point->normal.x, point->normal.y, point->normal.z);
-				//printf("%f\n", point->normal.z);
 			}
 			point->point = -1;
 		}
@@ -148,19 +152,25 @@ t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *point, double	length)
 
 	while (first)
 	{
+		point->type = first->type; 
 		if (first->type == SPHERE)
 			point->point = hits_sphere(ray, first);
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
 		if (point->point >= 0)
-		{	
+		{
+			//printf("LENGTH HIT LIGHT %f\n", length);
 			point->closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point->point), ADD);
-			length_hit = vec_length_squared(point->closest_pt);
+			length_hit = vec_length_squared(vec_add_vec(point->closest_pt, ray.origin, MINUS));
+			get_normal(first, point, ray);
+			//printf("LENGTH OBJ 0BJ %f\n", length_hit);
 			//printf("ray origin %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
 			//printf("point %f %f %f\n", point->closest_pt.x, point->closest_pt.y, point->closest_pt.z);
-			if (length_hit < length)
+			if (dot_product(vec_normalize(vec_add_vec(point->closest_pt, ray.origin, MINUS)), point->normal) > 0 || first->type != PLANE)
 			{
-				return (point->hit = 1, *point);
+				// printf("%f\n", dot_product(vec_add_vec(point->closest_pt, ray.origin, MINUS), vec_add_vec(point->normal, ray.origin, MINUS)));
+				if (length_hit < length)
+					return (point->hit = 1, *point);
 			}
 			point->point = -1;
 		}
@@ -177,19 +187,21 @@ t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
 	t_color	res;
 	double	length;
 	double	intensite;
-	int		i;
+	t_obj	*first;
 
 	col = vec_init(0,0,0);
-	i = 0;
+	first = mlx.first;
 	while(mlx.first)
 	{
 		if (mlx.first->type == LIGHT)
 		{
-			ray.direction = vec_normalize(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS));
-			length = vec_length_squared(vec_add_vec(ray.direction, ray.origin, MINUS));
-			check_shadow(ray, mlx.first, &shadow, length);
+			ray.direction = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
+			length = vec_length_squared(ray.direction);
+			ray.direction = vec_normalize(ray.direction);
+			check_shadow(ray, first, &shadow, length);
 			if (!(shadow.hit))
 			{
+				//return col_init(255,255,255);
 				intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS)), point.normal), 0, 1) * INTENSITE;
 				intensite = intensite / vec_length_squared(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS));
 				//printf("\n%f\n", intensite);
@@ -201,10 +213,10 @@ t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
 				lumcol.z = mlx.first->col.z * mlx.first->light->ratio * intensite * point.col.z;
 				col = vec_add_vec(lumcol, col, ADD);
 			}
-			i++;
 		}
 		mlx.first = mlx.first->next;
 	}
+	//return col_init(0,0,0);
 	// lumcol = col_mul(mlx.am_light->col, mlx.am_light->amlight->ratio);
 	// col = col_add_col(col, lumcol);
 	// col = col_mul_col(col, point.col);
@@ -236,7 +248,7 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 	if (point.hit)
 	{
 		//return(point.col);
-		//printf("%f\n", point.normal.x);
+		//printf("%f %f %f\n", point.closest_pt.x, point.closest_pt.y, point.closest_pt.z);
 		//t_pos	lumiere = vec_init(0.0,0,15);
 		// double	am_col = mlx.am_light->amlight->ratio;
 		// t_color	am = mlx.am_light->col;
@@ -248,6 +260,8 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 		//printf("%f\n", intensite);
 		//return(col_init(255,255,255));
 		//printf("%f\n", intensite);
+		// printf("POINT NORMAL OBJ HIT CAMERA %f %f %f\n", point.normal.x, point.normal.y, point.normal.z);
+		// printf("TYPE %i\n", point.type);
 		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
 		lumcol = check_lights(ray, mlx, point); //col_mul(col_init(0,0,255), intensite * 0.5);
 		// if (shadow.hit)
@@ -294,6 +308,31 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 	return;
 }
 
+// t_vars	fix_planes_norm(t_vars *mlx)
+// {
+// 	t_pos	norm;
+// 	t_obj	*first;
+	
+// 	first = mlx->first;
+// 	while (mlx->first)
+// 	{
+// 		if (mlx->first->type == PLANE)
+// 		{
+// 			if (dot_product(mlx->first->plane->normal, mlx->camera->camera->orientation) < 0)
+// 			{
+// 				printf("QSDQSDQSD\n");
+// 				norm = vec_init(-mlx->first->plane->normal.x, -mlx->first->plane->normal.y, -mlx->first->plane->normal.z);
+// 				mlx->first->plane->normal.x = norm.x;
+// 				mlx->first->plane->normal.y = norm.y;
+// 				mlx->first->plane->normal.z = norm.z;
+// 			}
+// 		}
+// 		mlx->first = mlx->first->next;
+// 	}
+// 	mlx->first = first;
+// 	return (*mlx);
+// }
+
 void	render_image(t_vars mlx, t_data *img)
 {
 	t_pos		pixel;
@@ -335,7 +374,7 @@ void	render(t_obj *first)
 	img.addr =  mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	render_image(mlx, &img);
 	write(1, "\rRENDERING 100%", 15);
-	write(1, "\n", 1);
+	printf("\n");
 	mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
     mlx_hook(mlx.win, 17, 1L<<0, &close_window, &mlx);
 	mlx_key_hook(mlx.win, &handle_key, &mlx);

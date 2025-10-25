@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/25 13:58:50 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/25 20:58:58 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define HEIGHT 480
 # define MINUS 0
 # define ADD 1
-# define SAMPLES 10
+# define SAMPLES 5
 # define M_PI 3.14159265358979323846
 # define INTENSITE 150
 
@@ -126,6 +126,7 @@ typedef struct	s_hit
 	t_color	col;
 	t_pos	normal;
 	double	delta;
+	int		type;
 }	t_hit;
 
 // typedef struct s_obj
