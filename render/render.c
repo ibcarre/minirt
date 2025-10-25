@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/24 23:02:37 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/25 13:58:12 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,12 +169,65 @@ t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *point, double	length)
 	return (*point);
 }
 
+t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
+{
+	t_hit	shadow;
+	t_pos	col;
+	t_pos	lumcol;
+	t_color	res;
+	double	length;
+	double	intensite;
+	int		i;
+
+	col = vec_init(0,0,0);
+	i = 0;
+	while(mlx.first)
+	{
+		if (mlx.first->type == LIGHT)
+		{
+			ray.direction = vec_normalize(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS));
+			length = vec_length_squared(vec_add_vec(ray.direction, ray.origin, MINUS));
+			check_shadow(ray, mlx.first, &shadow, length);
+			if (!(shadow.hit))
+			{
+				intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS)), point.normal), 0, 1) * INTENSITE;
+				intensite = intensite / vec_length_squared(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS));
+				//printf("\n%f\n", intensite);
+				// lumcol = col_mul(mlx.first->col, mlx.first->light->ratio * intensite);
+				// lumcol = col_mul_col(lumcol, point.col);
+				// col = col_add_col(lumcol, col);
+				lumcol.x = mlx.first->col.x * mlx.first->light->ratio * intensite * point.col.x;
+				lumcol.y = mlx.first->col.y * mlx.first->light->ratio * intensite * point.col.y;
+				lumcol.z = mlx.first->col.z * mlx.first->light->ratio * intensite * point.col.z;
+				col = vec_add_vec(lumcol, col, ADD);
+			}
+			i++;
+		}
+		mlx.first = mlx.first->next;
+	}
+	// lumcol = col_mul(mlx.am_light->col, mlx.am_light->amlight->ratio);
+	// col = col_add_col(col, lumcol);
+	// col = col_mul_col(col, point.col);
+	lumcol.x = mlx.am_light->col.x * mlx.am_light->amlight->ratio;
+	lumcol.y = mlx.am_light->col.y * mlx.am_light->amlight->ratio;
+	lumcol.z = mlx.am_light->col.z * mlx.am_light->amlight->ratio;
+	col = vec_add_vec(lumcol, col, ADD);
+	col.x = col.x * point.col.x;
+	col.y = col.y * point.col.y;
+	col.z = col.z * point.col.z;
+	res.x = col.x / 255;
+	res.y = col.y / 255;
+	res.z = col.z / 255;
+	return (res);
+}
+
 t_color	check_meshes(t_ray ray, t_vars mlx)
 {
 	t_color col;
 	t_hit	point;
-	t_hit	shadow;
-	double	intensite;
+	// t_hit	shadow;
+	t_color	lumcol;
+	// double	intensite;
 
 	// if (idx > 5)
 	// 	return (col_init(255, 255, 255));
@@ -184,32 +237,33 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 	{
 		//return(point.col);
 		//printf("%f\n", point.normal.x);
-		t_pos	lumiere = vec_init(0.0,0,15);
-		double	am_col = mlx.am_light->amlight->ratio;
-		t_color	am = mlx.am_light->col;
-		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
-		ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
-		check_shadow(ray, mlx.first, &shadow, vec_length_squared(vec_add_vec(ray.direction, ray.origin, MINUS)));
-		intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
-		intensite = intensite / vec_length_squared(vec_add_vec(lumiere, point.closest_pt, MINUS));
+		//t_pos	lumiere = vec_init(0.0,0,15);
+		// double	am_col = mlx.am_light->amlight->ratio;
+		// t_color	am = mlx.am_light->col;
+		// ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
+		// check_shadow(ray, mlx.first, &shadow, vec_length_squared(vec_add_vec(ray.direction, ray.origin, MINUS)));
+		// intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
+		// intensite = intensite / vec_length_squared(vec_add_vec(lumiere, point.closest_pt, MINUS));
+		//jadditionne ttes les couleurs obtenues puis je les divise par le nombre de light
 		//printf("%f\n", intensite);
 		//return(col_init(255,255,255));
 		//printf("%f\n", intensite);
-		t_color lumcol = col_mul(col_init(0,0,255), intensite * 0.5);
-		if (shadow.hit)
-		{
-			col.x = ((lumcol.x + point.col.x)/2 + am.x * am_col) * 0.7;
-			col.y = ((lumcol.y + point.col.y)/2 + am.y * am_col) * 0.7;
-			col.z = ((lumcol.z + point.col.z)/2 + am.z * am_col) * 0.7;
-			return(col);
-		}
-		col.x = (lumcol.x + point.col.x)/2 + am.x * am_col;
-		col.y = (lumcol.y + point.col.y)/2 + am.y * am_col;
-		col.z = (lumcol.z + point.col.z)/2 + am.z * am_col;
+		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
+		lumcol = check_lights(ray, mlx, point); //col_mul(col_init(0,0,255), intensite * 0.5);
+		// if (shadow.hit)
+		// {
+		// 	col.x = ((lumcol.x + point.col.x)/2 + am.x * am_col) * 0.7;
+		// 	col.y = ((lumcol.y + point.col.y)/2 + am.y * am_col) * 0.7;
+		// 	col.z = ((lumcol.z + point.col.z)/2 + am.z * am_col) * 0.7;
+		// 	return(col);
+		// }
+		// col.x = (lumcol.x + point.col.x)/2 + am.x * am_col;
+		// col.y = (lumcol.y + point.col.y)/2 + am.y * am_col;
+		// col.z = (lumcol.z + point.col.z)/2 + am.z * am_col;
 		// col.x = (point.col.x + am.x * am_col) * intensite;
 		// col.y = (point.col.y + am.y * am_col) * intensite;
 		// col.z = (point.col.z + am.z * am_col) * intensite;
-		return(col);
+		return(lumcol);
 	}
 	return (col);
 }
@@ -265,6 +319,7 @@ void	render_image(t_vars mlx, t_data *img)
 		}
 		img->x = 0;
 		img->y = img->y + 1;
+		loading(img->y);
 	}
 }
 
@@ -279,6 +334,8 @@ void	render(t_obj *first)
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
 	img.addr =  mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	render_image(mlx, &img);
+	write(1, "\rRENDERING 100%", 15);
+	write(1, "\n", 1);
 	mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
     mlx_hook(mlx.win, 17, 1L<<0, &close_window, &mlx);
 	mlx_key_hook(mlx.win, &handle_key, &mlx);

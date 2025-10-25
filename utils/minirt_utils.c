@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 23:19:10 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 11:08:47 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/25 01:05:30 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,10 @@ double	abs_f(double x)
 	if (x < 0)
 		return (-x);
 	return (x);
+}
+
+void	loading(int	index)
+{
+	index = (index * 100)/HEIGHT;
+	printf("\rRENDERING %i%%", index);
 }

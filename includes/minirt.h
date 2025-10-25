@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 11:37:48 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/25 13:58:50 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define ADD 1
 # define SAMPLES 10
 # define M_PI 3.14159265358979323846
+# define INTENSITE 150
 
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
@@ -199,6 +200,9 @@ t_color col_mul(t_color col, double x);
 void	print_vec(char *s, t_pos vec);
 t_obj	*get_amlight(t_vars mlx);
 double	abs_f(double x);
+t_color col_mul_col(t_color col, t_color col2);
+void	loading(int	i);
+t_pos	cross(t_pos x, t_pos y);
 
 #endif
 
