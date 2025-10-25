@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:29:29 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/24 17:27:26 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/25 04:42:25 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_viewport	*viewport_init(t_camera *cam)
 	// view_z = - view_w/(2 * (double)tan((double)cam->fov / 2 * M_PI/180));
 	view_z = view_w / tan(((double)cam->fov * M_PI/180)/2);
 	printf("Focal length : %f\n", view_z);
-	vp->vport = vec_init(view_w, -view_h, - view_z);
+	vp->vport = vec_init(view_w, -view_h, view_z);
 	return (vp);
 }
 
@@ -55,7 +55,7 @@ t_obj	*camera_setup(t_obj *camera)
 	vp->pixel_delta.y = camera->camera->viewport->vport.y/(double)HEIGHT;
 	vp->pixel_top_left.y = camera->pos.y - (camera->camera->viewport->vport.y / 2) + (vp->pixel_delta.y / 2);
 	vp->pixel_top_left.x = camera->pos.x - (camera->camera->viewport->vport.x / 2) + (vp->pixel_delta.x / 2);
-	vp->pixel_top_left.z = camera->pos.z + camera->camera->viewport->vport.z; // right handed orientation camera faces -z 
+	vp->pixel_top_left.z = camera->pos.z - camera->camera->viewport->vport.z; // right handed orientation camera faces -z 
 	camera->camera->viewport = vp;
 	return (camera);
 }
