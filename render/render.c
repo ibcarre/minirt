@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/25 21:43:27 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/26 10:03:26 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,9 @@ t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 	else if (first->type == SPHERE)
 		normal = vec_normalize(vec_add_vec(t_point, first->pos, MINUS));
 	else if (first->type == PLANE)
-	{
-		if (dot_product(ray.direction, first->plane->normal) > 0)
-			normal = vec_init(-first->plane->normal.x, -first->plane->normal.y, -first->plane->normal.z);
-		else
 			normal = first->plane->normal;
-	}
+	if (dot_product(ray.direction, normal) > 0)
+		normal = vec_init(-normal.x, -normal.y, -normal.z);
 	point->normal = normal;
 	return (normal);
 }
@@ -166,7 +163,7 @@ t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *point, double	length)
 			//printf("LENGTH OBJ 0BJ %f\n", length_hit);
 			//printf("ray origin %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
 			//printf("point %f %f %f\n", point->closest_pt.x, point->closest_pt.y, point->closest_pt.z);
-			if (dot_product(vec_normalize(vec_add_vec(point->closest_pt, ray.origin, MINUS)), point->normal) > 0 || first->type != PLANE)
+			if (first->type != PLANE)
 			{
 				// printf("%f\n", dot_product(vec_add_vec(point->closest_pt, ray.origin, MINUS), vec_add_vec(point->normal, ray.origin, MINUS)));
 				if (length_hit < length)
