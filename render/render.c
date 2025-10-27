@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/26 10:03:26 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/27 15:29:58 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,15 +284,22 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 	t_color		col;
 	t_obj	*camera;
 	int	i;
+	t_viewport *vp;
+	double rand;
 
 	i = 0;
 	camera = mlx.camera;
+	vp = camera->camera->viewport;
 	col = col_init(0,0,0);
+	//print_vec("PXXXX ", px);
 	while (i < SAMPLES)
 	{
-		px.x = camera->camera->viewport->pixel_top_left.x + ((img->x + (myrand(px.x + i) - 0.5)) * camera->camera->viewport->pixel_delta.x);
-		px.y = camera->camera->viewport->pixel_top_left.y + ((img->y + (myrand(px.y + i) - 0.5)) * camera->camera->viewport->pixel_delta.y);
+		rand = img->x + (myrand(px.y + i) - 0.5);
+		px = vec_add_vec(vp->pixel_top_left, vec_mul(vp->pixel_delta_u, rand), ADD);
+		rand = img->y + (myrand(px.x + i) - 0.5);
+		px = vec_add_vec(px, vec_mul(vp->pixel_delta_v, rand), ADD);
 		ray.direction = vec_normalize(vec_add_vec(px, mlx.camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
+		//print_vec("RAY DIR ", ray.direction);
 		ray.origin = mlx.camera->pos;
 		col = col_add_col(check_meshes(ray, mlx), col);
 		i++;
@@ -347,9 +354,11 @@ void	render_image(t_vars mlx, t_data *img)
 	{
 		while (img->x < WIDTH)
 		{
-			pixel.x = vp->pixel_top_left.x + (img->x * vp->pixel_delta.x);
-			pixel.y = vp->pixel_top_left.y + (img->y * vp->pixel_delta.y);
-			pixel.z = vp->pixel_top_left.z;
+			// pixel.x = vp->pixel_top_left.x + (img->x * vp->pixel_delta.x);
+			// pixel.y = vp->pixel_top_left.y + (img->y * vp->pixel_delta.y);
+			// pixel.z = vp->pixel_top_left.z;
+			pixel = vec_add_vec(vp->pixel_top_left, vec_mul(vp->pixel_delta_u, img->x), ADD);
+			pixel = vec_add_vec(pixel, vec_mul(vp->pixel_delta_v, img->y), ADD);
 			ray_color(ray, mlx, img, pixel);
 			img->x = img->x + 1;
 		}

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/25 20:58:58 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/27 12:39:17 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ typedef struct s_amlight
 typedef struct	s_viewport {
 	double		view_h;
 	double		view_w;
-	t_pos		pixel_delta;
-	t_pos		vport;
+	t_pos		pixel_delta_u;
+	t_pos		pixel_delta_v;
+	t_pos		vport_u;
+	t_pos		vport_v;
 	t_pos		pixel_top_left;
 }	t_viewport;
 
