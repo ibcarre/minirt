@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/27 12:39:17 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/29 14:35:32 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	double		diameter;
+	double		rayon;
 	double		height;
 	t_pos		normal;
 } t_cylinder;

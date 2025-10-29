@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:29:29 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/27 16:40:12 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/27 20:45:09 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_obj	*camera_setup(t_obj *camera)
 
 	camera = get_camera(camera);
 	v_up = vec_init(0,1,0);
+	camera->camera->orientation = vec_normalize(camera->camera->orientation);
 	//foc_length = vec_length(vec_add_vec(camera->pos, camera->camera->orientation, MINUS));
 	foc_length = vec_length(camera->camera->orientation);
 	angle = (double)camera->camera->fov * M_PI/180;

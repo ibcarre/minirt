@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 17:06:50 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/29 14:35:49 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ t_obj	*fill_cylinder(char *line, t_obj **obj)
 		return (free(*obj), *obj = NULL);
 	if (!fill_or(&((*obj)->cylinder->normal), &line))
 		return (free_objs(*obj), *obj = NULL);
-	(*obj)->cylinder->diameter = ft_clamp(ft_atof(&line, &i), 0, INT_MAX);
+	(*obj)->cylinder->rayon = ft_clamp(ft_atof(&line, &i), 0, INT_MAX)/2;
 	(*obj)->cylinder->height = ft_clamp(ft_atof(&line, &i), 0, INT_MAX);
 	if (!fill_col(*obj, &line) || !i)
 	{
