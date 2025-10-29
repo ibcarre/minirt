@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/27 15:29:58 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/10/28 16:00:27 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,12 @@ double	hits_plane(t_ray ray, t_obj *first)
 	return (-1);
 }
 
+double	hits_cylinder(t_ray ray, t_obj *obj)
+{
+	
+	return (-1);
+}
+
 t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 {
 	point->hit = 0;
@@ -121,6 +127,8 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 			point->point = hits_sphere(ray, first);
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
+		else if (first->type == CYLINDER)
+			point->point = hits_cylinder(ray, first);
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
