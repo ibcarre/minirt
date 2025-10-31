@@ -57,11 +57,11 @@ t_obj	*fill_sphere(char *line, t_obj **obj)
 		i++;
 	line = skip_spaces(&line[i]);
 	if (!fill_pos(*obj, &line))
-		return(free(*obj), (*obj) = NULL);
+		return (free(*obj), (*obj) = NULL);
 	(*obj)->sphere = malloc(sizeof(t_sphere));
 	if (!((*obj)->sphere))
 		return (free((*obj)->sphere), free(*obj), *obj = NULL);
-	(*obj)->sphere->rayon = (ft_atof(&line, &works))/2;
+	(*obj)->sphere->rayon = (ft_atof(&line, &works)) / 2;
 	if ((*obj)->sphere->rayon < 0)
 	{
 		write(2, "NEG DIAMETER\n", 13);
@@ -185,7 +185,7 @@ void	fill_obj(char *line, t_obj **last)
 		fill_camera(line, last);
 	else if ((*last)->type == PLANE)
 		fill_plane(line, last);
-	else if ((*last) ->type == CYLINDER)
+	else if ((*last)->type == CYLINDER)
 		fill_cylinder(line, last);
 	return ;
 }

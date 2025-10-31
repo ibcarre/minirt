@@ -56,8 +56,8 @@ double	abs_f(double x)
 	return (x);
 }
 
-void	loading(int	index)
+void	loading(int index)
 {
-	index = (index * 100)/HEIGHT;
+	index = (index * 100) / HEIGHT;
 	printf("\rRENDERING %i%%", index);
 }

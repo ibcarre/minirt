@@ -83,25 +83,24 @@ t_pos	random_unit_vec(int seed)
 
 t_pos random_unit_vec_dir(int seed, t_pos normal)
 {
-    double u = myrand(seed);
-    double v = myrand(seed * 2 + 37);
+	double u = myrand(seed);
+	double v = myrand(seed * 2 + 37);
 
-    double theta = acos(sqrt(1.0 - u));  // cosine-weighted
-    double phi = 2.0 * 3.14 * v;
+	double theta = acos(sqrt(1.0 - u));  // cosine-weighted
+	double phi = 2.0 * 3.14 * v;
 
-    double x = sin(theta) * cos(phi);
-    double y = sin(theta) * sin(phi);
-    double z = cos(theta);
+	double x = sin(theta) * cos(phi);
+	double y = sin(theta) * sin(phi);
+	double z = cos(theta);
 
-    // transform (x,y,z) from local space to world space aligned with `normal`
-    t_pos up = fabs(normal.z) < 0.999 ? vec_init(0,0,1) : vec_init(1,0,0);
-    t_pos tangent = vec_normalize(vec_mul_vec(up, normal));
-    t_pos bitangent = vec_mul_vec(normal, tangent);
+	// transform (x,y,z) from local space to world space aligned with `normal`
+	t_pos up = fabs(normal.z) < 0.999 ? vec_init(0,0,1) : vec_init(1,0,0);
+	t_pos tangent = vec_normalize(vec_mul_vec(up, normal));
+	t_pos bitangent = vec_mul_vec(normal, tangent);
 
-    t_pos world = vec_add_vec(
-        vec_add_vec(vec_mul(tangent, x),
-        vec_mul(bitangent, y), ADD),
-        vec_mul(normal, z), ADD);
-
-    return vec_normalize(world);
+	t_pos world = vec_add_vec(
+		vec_add_vec(vec_mul(tangent, x),
+		vec_mul(bitangent, y), ADD),
+		vec_mul(normal, z), ADD);
+	return (vec_normalize(world));
 }

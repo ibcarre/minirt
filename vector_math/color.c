@@ -32,7 +32,7 @@ t_color	col_add_col(t_color col, t_color color)
 	return (res);
 }
 
-t_color col_mul(t_color col, double x)
+t_color	col_mul(t_color col, double x)
 {
 	t_color	res;
 
@@ -42,7 +42,7 @@ t_color col_mul(t_color col, double x)
 	return (res);
 }
 
-t_color col_mul_col(t_color col, t_color col2)
+t_color	col_mul_col(t_color col, t_color col2)
 {
 	t_color	res;
 
