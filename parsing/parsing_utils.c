@@ -43,7 +43,7 @@ int	is_rt_file(char *filename)
 		|| filename[i - 2] != 'r'
 		|| filename[i - 1] != 't')
 	{
-		printf("Please use a .rt file\n");
+		write(2, "Please use a .rt file\n", 22);
 		return (-1);
 	}
 	return (0);
