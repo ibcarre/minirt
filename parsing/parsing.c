@@ -59,7 +59,7 @@ t_obj	*check_type(char *line, t_obj *obj)
 	else
 	{
 		free(obj);
-		printf("Wrong type\n");
+		write(2, "Wrong type\n", 11);
 		return (NULL);
 	}
 	return (obj);
