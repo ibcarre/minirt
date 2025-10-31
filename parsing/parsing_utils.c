@@ -12,7 +12,6 @@
 
 #include "../includes/minirt.h"
 
-
 int	ft_isspace(char c)
 {
 	if (c == '\t' || (c >= 10 && c < 14))
@@ -22,7 +21,6 @@ int	ft_isspace(char c)
 	return (0);
 }
 
-
 char	*skip_spaces(char *line)
 {
 	int	i;
@@ -31,4 +29,22 @@ char	*skip_spaces(char *line)
 	while (line[i] && ft_isspace(line[i]))
 		i++;
 	return (&line[i]);
+}
+
+int	is_rt_file(char *filename)
+{
+	int	i;
+
+	i = 0;
+	while (filename[i])
+		i++;
+	if (i < 3
+		|| filename[i - 3] != '.'
+		|| filename[i - 2] != 'r'
+		|| filename[i - 1] != 't')
+	{
+		printf("Please use a .rt file\n");
+		return (-1);
+	}
+	return (0);
 }

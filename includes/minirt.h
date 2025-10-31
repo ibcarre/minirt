@@ -206,6 +206,7 @@ double	abs_f(double x);
 t_color col_mul_col(t_color col, t_color col2);
 void	loading(int	i);
 t_pos	cross(t_pos x, t_pos y);
+int		is_rt_file(char *filename);
 
 #endif
 
