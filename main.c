@@ -20,6 +20,10 @@ int	main(int argv, char **argc)
 	if (argv != 2)
 		return (1);
 	//check si argc[1] est bien un fichier rt
+	if (is_rt_file(argc[1]) == -1)
+	{
+		return (1);
+	}
 	fd = open(argc[1], O_RDONLY);
 	if (fd < 0)
 		return (perror("Error"), 2);
