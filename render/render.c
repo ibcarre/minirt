@@ -24,16 +24,16 @@ void	my_mlx_pixel_put(t_data *data, int height, int width, int color)
 
 int	close_window(t_vars *mlx)
 {
-    mlx_destroy_window(mlx->mlx, mlx->win);
-    mlx_destroy_display(mlx->mlx);
+	mlx_destroy_window(mlx->mlx, mlx->win);
+	mlx_destroy_display(mlx->mlx);
 	free(mlx->mlx);
 	free_objs(mlx->first);
-    exit(0);
+	exit(0);
 }
 
 int	handle_key(int keycode, t_vars *mlx)
 {
-	if(keycode == XK_Escape)
+	if (keycode == XK_Escape)
 		close_window(mlx);
 	return (0);
 }
@@ -54,7 +54,7 @@ double	hits_sphere(t_ray ray, t_obj *first)
 	double	a;
 	double	h;
 	double	c;
-	double delta;
+	double	delta;
 
 	or_to_oc = vec_add_vec(first->pos, ray.origin, MINUS);
 	a = vec_length(ray.direction) * vec_length(ray.direction);//dot_product(ray.direction, ray.direction);
@@ -63,10 +63,10 @@ double	hits_sphere(t_ray ray, t_obj *first)
 	delta = h * h - a * c;
 	if (delta >= 0)
 	{
-		delta = (h - sqrt(delta))/(a);
+		delta = (h - sqrt(delta)) / (a);
 		if (delta < 0)
 		{
-			delta = (h + sqrt(h * h - a * c))/a;
+			delta = (h + sqrt(h * h - a * c)) / a;
 			return (delta);
 		}
 		return (delta); // moins pour obtenir la solution la plus proche de la caméra, return negatif quand on est dans la sphère (forcément...)
@@ -81,7 +81,7 @@ t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 
 	t_point = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
 	if (!first)
-		return (vec_init(0,0,0));
+		return (vec_init(0, 0, 0));
 	else if (first->type == SPHERE)
 		normal = vec_normalize(vec_add_vec(t_point, first->pos, MINUS));
 	else if (first->type == PLANE)
@@ -102,7 +102,7 @@ double	hits_plane(t_ray ray, t_obj *first)
 	if (abs_f(denom) > 1e-6)
 	{
 		point = vec_add_vec(first->pos, ray.origin, MINUS);
-		t = dot_product(point, first->plane->normal)/denom;
+		t = dot_product(point, first->plane->normal) / denom;
 		if (t > 1e-6)
 			return (t);
 		return (-1);
@@ -112,7 +112,7 @@ double	hits_plane(t_ray ray, t_obj *first)
 
 double	hits_cylinder(t_ray ray, t_obj *obj)
 {
-	
+
 	return (-1);
 }
 
@@ -317,7 +317,7 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 	col.z = (int)ft_clamp((col.z/SAMPLES), 0, 255);
 	i = create_trgb(0, col.x, col.y, col.z);
 	my_mlx_pixel_put(img, img->y, img->x, i);
-	return;
+	return ;
 }
 
 // t_vars	fix_planes_norm(t_vars *mlx)
@@ -385,12 +385,12 @@ void	render(t_obj *first)
 	mlx.mlx = mlx_init();
 	mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "blender");
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
-	img.addr =  mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	render_image(mlx, &img);
 	write(1, "\rRENDERING 100%", 15);
 	printf("\n");
 	mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
-    mlx_hook(mlx.win, 17, 1L<<0, &close_window, &mlx);
+	mlx_hook(mlx.win, 17, 1L<<0, &close_window, &mlx);
 	mlx_key_hook(mlx.win, &handle_key, &mlx);
 	mlx_loop(mlx.mlx);
 }

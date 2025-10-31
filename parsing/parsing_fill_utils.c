@@ -29,7 +29,7 @@ int	fill_col(t_obj *obj, char **line)
 	i = 0;
 	commas = 0;
 	*line = skip_spaces(*line);
-	while((*line)[i] && !ft_isspace((*line)[i]))
+	while ((*line)[i] && !ft_isspace((*line)[i]))
 	{
 		if ((*line)[i] == ',')
 			commas ++;
@@ -53,7 +53,7 @@ int	fill_pos(t_obj *obj, char **line)
 	i = 0;
 	commas = 0;
 	*line = skip_spaces(*line);
-	while((*line)[i] && !ft_isspace((*line)[i]))
+	while ((*line)[i] && !ft_isspace((*line)[i]))
 	{
 		if ((*line)[i] == ',')
 			commas ++;
@@ -69,7 +69,7 @@ int	fill_pos(t_obj *obj, char **line)
 	return (1);
 }
 
-double ft_clamp(double nb, double min, double max)
+double	ft_clamp(double nb, double min, double max)
 {
 	if (nb < min)
 		nb = min;
@@ -86,7 +86,7 @@ int	fill_or(t_pos *pos, char **line)
 	i = 0;
 	commas = 0;
 	*line = skip_spaces(*line);
-	while((*line)[i] && !ft_isspace((*line)[i]))
+	while ((*line)[i] && !ft_isspace((*line)[i]))
 	{
 		if ((*line)[i] == ',')
 			commas ++;
@@ -99,5 +99,5 @@ int	fill_or(t_pos *pos, char **line)
 	pos->z = ft_clamp(ft_atof(line, &commas), -1, 1);
 	if (!commas)
 		return (0);
-	return (1);	
+	return (1);
 }

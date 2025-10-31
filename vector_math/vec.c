@@ -51,7 +51,7 @@ t_pos	vec_add(t_pos vec, double nb, int op)
 
 t_pos	vec_mul(t_pos vec, double nb)
 {
-	t_pos res;
+	t_pos	res;
 
 	res.x = vec.x * nb;
 	res.y = vec.y * nb;

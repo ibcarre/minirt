@@ -58,9 +58,9 @@ typedef enum e_type
 typedef struct s_amlight
 {
 	double		ratio;
-} t_amlight;
+}	t_amlight;
 
-typedef struct	s_viewport {
+typedef struct s_viewport {
 	double		view_h;
 	double		view_w;
 	t_pos		pixel_delta_u;
@@ -75,32 +75,32 @@ typedef struct s_camera
 	t_pos			orientation;
 	int				fov;
 	t_viewport		*viewport;
-} t_camera;
+}	t_camera;
 
 typedef struct s_light
 {
 	double		ratio;
-} t_light;
+}	t_light;
 
 typedef struct s_sphere
 {
 	double		rayon;
 	int			backface;
-} t_sphere;
+}	t_sphere;
 
 typedef struct s_plane
 {
 	t_pos	normal;
-} t_plane;
+}	t_plane;
 
 typedef struct s_cylinder
 {
 	double		rayon;
 	double		height;
 	t_pos		normal;
-} t_cylinder;
+}	t_cylinder;
 
-typedef	struct	s_ray
+typedef	struct s_ray
 {
 	t_pos	origin;
 	t_pos	direction;
@@ -120,7 +120,7 @@ typedef struct s_obj
 	struct s_obj	*next;
 }	t_obj;
 
-typedef struct	s_hit
+typedef struct s_hit
 {
 	double	point;
 	t_pos	closest_pt;
@@ -150,7 +150,7 @@ typedef struct	s_hit
 // 	struct s_cylinder	*next;
 // } t_cylinder;
 
-typedef struct	s_data {
+typedef struct s_data {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
@@ -160,7 +160,7 @@ typedef struct	s_data {
 	int		endian;
 }	t_data;
 
-typedef struct	s_vars {
+typedef struct s_vars {
 	void	*mlx;
 	void	*win;
 	t_obj	*first;
@@ -194,17 +194,17 @@ t_pos	vec_normalize(t_pos vec);
 double	dot_product(t_pos vec, t_pos vec2);
 t_obj	*camera_setup(t_obj *camera);
 double	rand_min_max(int seed, int min, int max);
-double myrand(int seed);
+double	myrand(int seed);
 t_color	col_init(int x, int y, int z);
 t_color	col_add_col(t_color col, t_color color);
 double	vec_length_squared(t_pos vec);
-t_pos	random_unit_vec_dir(int	seed, t_pos dir);
-t_color col_mul(t_color col, double x);
+t_pos	random_unit_vec_dir(int seed, t_pos dir);
+t_color	col_mul(t_color col, double x);
 void	print_vec(char *s, t_pos vec);
 t_obj	*get_amlight(t_vars mlx);
 double	abs_f(double x);
-t_color col_mul_col(t_color col, t_color col2);
-void	loading(int	i);
+t_color	col_mul_col(t_color col, t_color col2);
+void	loading(int i);
 t_pos	cross(t_pos x, t_pos y);
 int		is_rt_file(char *filename);
 

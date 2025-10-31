@@ -14,7 +14,7 @@
 
 t_pos	vec_div_vec(t_pos vec, t_pos vec2)
 {
-	t_pos res;
+	t_pos	res;
 
 	res.x = 0;
 	res.y = 0;
@@ -32,7 +32,7 @@ t_pos	vec_div_vec(t_pos vec, t_pos vec2)
 
 t_pos	vec_add_vec(t_pos vec, t_pos vec2, int nb)
 {
-	t_pos res;
+	t_pos	res;
 
 	if (nb == 1)
 	{
@@ -51,7 +51,7 @@ t_pos	vec_add_vec(t_pos vec, t_pos vec2, int nb)
 
 t_pos	vec_mul_vec(t_pos vec, t_pos vec2)
 {
-	t_pos res;
+	t_pos	res;
 
 	res.x = vec.x * vec2.x;
 	res.y = vec.y * vec2.y;
