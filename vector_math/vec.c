@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/14 14:30:26 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/25 03:20:37 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/02 13:44:51 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@ t_pos	vec_div(t_pos vec, double nb)
 	res.x = 0;
 	res.y = 0;
 	res.z = 0;
-	if (nb == 0)
-	{
-		write(2, "Warning division by 0, res set to 0\n", 36);
-		return (res);
-	}
 	res.x = vec.x / nb;
 	res.y = vec.y / nb;
 	res.z = vec.z / nb;

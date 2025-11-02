@@ -1,7 +1,7 @@
 NAME = minirt
 
 CC = cc
-CFLAGS =  -Wfloat-equal -g -MMD
+CFLAGS =  -Wall -Wextra -Werror -g -MMD
 LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm -I./includes/minirt.h
 
 SRCS = main.c \

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/28 16:00:27 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/02 14:38:38 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,11 @@ double	hits_plane(t_ray ray, t_obj *first)
 	return (-1);
 }
 
-double	hits_cylinder(t_ray ray, t_obj *obj)
-{
+// double	hits_cylinder(t_ray ray, t_obj *obj)
+// {
 
-	return (-1);
-}
+// 	return (-1);
+// }
 
 t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 {
@@ -127,8 +127,8 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 			point->point = hits_sphere(ray, first);
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
-		else if (first->type == CYLINDER)
-			point->point = hits_cylinder(ray, first);
+		// else if (first->type == CYLINDER)
+		// 	point->point = hits_cylinder(ray, first);
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
@@ -148,40 +148,23 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 }
 
 
-t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *point, double	length)
+t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *shadow, double	length)
 {
 	double	length_hit;
-	point->hit = 0;
-	point->closest_pt.z = -1;
-	point->point = -1;
+	t_hit	point;
 
-	while (first)
+	shadow->hit = 0;
+	loop_objects(ray, first, &point);
+	if (point.hit)
 	{
-		point->type = first->type; 
-		if (first->type == SPHERE)
-			point->point = hits_sphere(ray, first);
-		else if (first->type == PLANE)
-			point->point = hits_plane(ray, first);
-		if (point->point >= 0)
+		length_hit = vec_length_squared(vec_add_vec(point.closest_pt, ray.origin, MINUS));
+		if (length_hit < length + 1e-6)
 		{
-			//printf("LENGTH HIT LIGHT %f\n", length);
-			point->closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point->point), ADD);
-			length_hit = vec_length_squared(vec_add_vec(point->closest_pt, ray.origin, MINUS));
-			get_normal(first, point, ray);
-			//printf("LENGTH OBJ 0BJ %f\n", length_hit);
-			//printf("ray origin %f %f %f\n", ray.origin.x, ray.origin.y, ray.origin.z);
-			//printf("point %f %f %f\n", point->closest_pt.x, point->closest_pt.y, point->closest_pt.z);
-			if (first->type != PLANE)
-			{
-				// printf("%f\n", dot_product(vec_add_vec(point->closest_pt, ray.origin, MINUS), vec_add_vec(point->normal, ray.origin, MINUS)));
-				if (length_hit < length)
-					return (point->hit = 1, *point);
-			}
-			point->point = -1;
+			shadow->hit = 1;
+			return (*shadow);
 		}
-		first = first->next;
 	}
-	return (*point);
+	return (*shadow);
 }
 
 t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
@@ -267,7 +250,7 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 		//printf("%f\n", intensite);
 		// printf("POINT NORMAL OBJ HIT CAMERA %f %f %f\n", point.normal.x, point.normal.y, point.normal.z);
 		// printf("TYPE %i\n", point.type);
-		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.001), ADD);
+		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.0001), ADD);
 		lumcol = check_lights(ray, mlx, point); //col_mul(col_init(0,0,255), intensite * 0.5);
 		// if (shadow.hit)
 		// {
