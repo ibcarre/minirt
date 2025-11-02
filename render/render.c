@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/02 14:38:38 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/02 18:12:18 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
 		// else if (first->type == CYLINDER)
-		// 	point->point = hits_cylinder(ray, first);
+		//  	point->point = hits_cylinder(ray, first);
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
@@ -189,13 +189,8 @@ t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
 			check_shadow(ray, first, &shadow, length);
 			if (!(shadow.hit))
 			{
-				//return col_init(255,255,255);
 				intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS)), point.normal), 0, 1) * INTENSITE;
 				intensite = intensite / vec_length_squared(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS));
-				//printf("\n%f\n", intensite);
-				// lumcol = col_mul(mlx.first->col, mlx.first->light->ratio * intensite);
-				// lumcol = col_mul_col(lumcol, point.col);
-				// col = col_add_col(lumcol, col);
 				lumcol.x = mlx.first->col.x * mlx.first->light->ratio * intensite * point.col.x;
 				lumcol.y = mlx.first->col.y * mlx.first->light->ratio * intensite * point.col.y;
 				lumcol.z = mlx.first->col.z * mlx.first->light->ratio * intensite * point.col.z;
@@ -204,10 +199,6 @@ t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
 		}
 		mlx.first = mlx.first->next;
 	}
-	//return col_init(0,0,0);
-	// lumcol = col_mul(mlx.am_light->col, mlx.am_light->amlight->ratio);
-	// col = col_add_col(col, lumcol);
-	// col = col_mul_col(col, point.col);
 	lumcol.x = mlx.am_light->col.x * mlx.am_light->amlight->ratio;
 	lumcol.y = mlx.am_light->col.y * mlx.am_light->amlight->ratio;
 	lumcol.z = mlx.am_light->col.z * mlx.am_light->amlight->ratio;
@@ -225,52 +216,20 @@ t_color	check_meshes(t_ray ray, t_vars mlx)
 {
 	t_color col;
 	t_hit	point;
-	// t_hit	shadow;
 	t_color	lumcol;
-	// double	intensite;
 
-	// if (idx > 5)
-	// 	return (col_init(255, 255, 255));
 	loop_objects(ray, mlx.first, &point);
 	col = col_mul(mlx.am_light->col, 0.8);
 	if (point.hit)
 	{
-		//return(point.col);
-		//printf("%f %f %f\n", point.closest_pt.x, point.closest_pt.y, point.closest_pt.z);
-		//t_pos	lumiere = vec_init(0.0,0,15);
-		// double	am_col = mlx.am_light->amlight->ratio;
-		// t_color	am = mlx.am_light->col;
-		// ray.direction = vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS));
-		// check_shadow(ray, mlx.first, &shadow, vec_length_squared(vec_add_vec(ray.direction, ray.origin, MINUS)));
-		// intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(lumiere, point.closest_pt, MINUS)), point.normal), 0, 1) * 10000;
-		// intensite = intensite / vec_length_squared(vec_add_vec(lumiere, point.closest_pt, MINUS));
-		//jadditionne ttes les couleurs obtenues puis je les divise par le nombre de light
-		//printf("%f\n", intensite);
-		//return(col_init(255,255,255));
-		//printf("%f\n", intensite);
-		// printf("POINT NORMAL OBJ HIT CAMERA %f %f %f\n", point.normal.x, point.normal.y, point.normal.z);
-		// printf("TYPE %i\n", point.type);
 		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.0001), ADD);
 		lumcol = check_lights(ray, mlx, point); //col_mul(col_init(0,0,255), intensite * 0.5);
-		// if (shadow.hit)
-		// {
-		// 	col.x = ((lumcol.x + point.col.x)/2 + am.x * am_col) * 0.7;
-		// 	col.y = ((lumcol.y + point.col.y)/2 + am.y * am_col) * 0.7;
-		// 	col.z = ((lumcol.z + point.col.z)/2 + am.z * am_col) * 0.7;
-		// 	return(col);
-		// }
-		// col.x = (lumcol.x + point.col.x)/2 + am.x * am_col;
-		// col.y = (lumcol.y + point.col.y)/2 + am.y * am_col;
-		// col.z = (lumcol.z + point.col.z)/2 + am.z * am_col;
-		// col.x = (point.col.x + am.x * am_col) * intensite;
-		// col.y = (point.col.y + am.y * am_col) * intensite;
-		// col.z = (point.col.z + am.z * am_col) * intensite;
 		return(lumcol);
 	}
 	return (col);
 }
 
-void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
+void	ray_color(t_ray ray, t_pos px, t_pos xy, t_global *global) //t_vars mlx, t_data *img, 
 {
 	t_color		col;
 	t_obj	*camera;
@@ -279,83 +238,87 @@ void	ray_color(t_ray ray, t_vars mlx, t_data *img, t_pos px)
 	double rand;
 
 	i = 0;
-	camera = mlx.camera;
+	camera = global->mlx.camera;
 	vp = camera->camera->viewport;
 	col = col_init(0,0,0);
-	//print_vec("PXXXX ", px);
+	ray.origin = global->mlx.camera->pos;
 	while (i < SAMPLES)
 	{
-		rand = img->x + (myrand(px.y + i) - 0.5);
+		rand = xy.x + (myrand(px.y + i) - 0.5);
 		px = vec_add_vec(vp->pixel_top_left, vec_mul(vp->pixel_delta_u, rand), ADD);
-		rand = img->y + (myrand(px.x + i) - 0.5);
+		rand = xy.y + (myrand(px.x + i) - 0.5);
 		px = vec_add_vec(px, vec_mul(vp->pixel_delta_v, rand), ADD);
-		ray.direction = vec_normalize(vec_add_vec(px, mlx.camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
-		//print_vec("RAY DIR ", ray.direction);
-		ray.origin = mlx.camera->pos;
-		col = col_add_col(check_meshes(ray, mlx), col);
+		ray.direction = vec_normalize(vec_add_vec(px, global->mlx.camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
+		col = col_add_col(check_meshes(ray, global->mlx), col);
 		i++;
 	}
 	col.x = (int)ft_clamp((col.x/SAMPLES), 0, 255);
 	col.y = (int)ft_clamp((col.y/SAMPLES), 0, 255);
 	col.z = (int)ft_clamp((col.z/SAMPLES), 0, 255);
 	i = create_trgb(0, col.x, col.y, col.z);
-	my_mlx_pixel_put(img, img->y, img->x, i);
+	pthread_mutex_lock(&(global->mutex));
+	my_mlx_pixel_put(global->img, xy.y, xy.x, i);
+	pthread_mutex_unlock(&(global->mutex));
 	return ;
 }
 
-// t_vars	fix_planes_norm(t_vars *mlx)
-// {
-// 	t_pos	norm;
-// 	t_obj	*first;
-	
-// 	first = mlx->first;
-// 	while (mlx->first)
-// 	{
-// 		if (mlx->first->type == PLANE)
-// 		{
-// 			if (dot_product(mlx->first->plane->normal, mlx->camera->camera->orientation) < 0)
-// 			{
-// 				printf("QSDQSDQSD\n");
-// 				norm = vec_init(-mlx->first->plane->normal.x, -mlx->first->plane->normal.y, -mlx->first->plane->normal.z);
-// 				mlx->first->plane->normal.x = norm.x;
-// 				mlx->first->plane->normal.y = norm.y;
-// 				mlx->first->plane->normal.z = norm.z;
-// 			}
-// 		}
-// 		mlx->first = mlx->first->next;
-// 	}
-// 	mlx->first = first;
-// 	return (*mlx);
-// }
+void	*routine(void *param)
+{
+	t_global	*global;
+	t_pos		xy;
+	t_pos		pixel;
+	t_ray		ray;
+
+	global = (t_global *) param;
+	pthread_mutex_lock(&(global->mutex));
+	xy.y = global->img->y;
+	pthread_mutex_unlock(&(global->mutex));
+	while (xy.y < HEIGHT)
+	{
+		xy.x = 0;
+		while (xy.x < WIDTH)
+		{
+			pixel = vec_add_vec(global->vp->pixel_top_left, vec_mul(global->vp->pixel_delta_u, xy.x), ADD);
+			pixel = vec_add_vec(pixel, vec_mul(global->vp->pixel_delta_v, xy.y), ADD);
+			ray_color(ray, pixel, xy, global);
+			xy.x = xy.x + 1;
+		}
+		pthread_mutex_lock(&(global->mutex));
+		global->img->y = global->img->y + 1;
+		xy.y = global->img->y;
+		pthread_mutex_unlock(&(global->mutex));
+		loading(xy.y);
+	}
+	return (NULL);
+}
+
 
 void	render_image(t_vars mlx, t_data *img)
 {
-	t_pos		pixel;
-	t_obj		*camera;
-	t_ray		ray;
-	t_viewport	*vp;
 
-	img->x = 0;
+	pthread_t	threads[CORES];
+	t_global	glob;
+	int	i;
+
 	img->y = 0;
-	camera = camera_setup(mlx.first);
-	mlx.camera = camera;
+	i = 0;
 	mlx.am_light = get_amlight(mlx);
-	vp = camera->camera->viewport;
-	while (img->y < HEIGHT)
+	mlx.camera = camera_setup(mlx.first);
+	glob.mlx = mlx;
+	glob.img = img;
+	glob.img->y = 0;
+	glob.vp = mlx.camera->camera->viewport;
+	pthread_mutex_init(&(glob.mutex), NULL);
+	while (i < CORES)
 	{
-		while (img->x < WIDTH)
-		{
-			// pixel.x = vp->pixel_top_left.x + (img->x * vp->pixel_delta.x);
-			// pixel.y = vp->pixel_top_left.y + (img->y * vp->pixel_delta.y);
-			// pixel.z = vp->pixel_top_left.z;
-			pixel = vec_add_vec(vp->pixel_top_left, vec_mul(vp->pixel_delta_u, img->x), ADD);
-			pixel = vec_add_vec(pixel, vec_mul(vp->pixel_delta_v, img->y), ADD);
-			ray_color(ray, mlx, img, pixel);
-			img->x = img->x + 1;
-		}
-		img->x = 0;
-		img->y = img->y + 1;
-		loading(img->y);
+		pthread_create(&(threads[i]), NULL, routine, &glob);
+		i++;
+	}
+	i = 0;
+	while (i < CORES)
+	{
+		pthread_join((threads[i]), NULL);
+		i++;
 	}
 }
 

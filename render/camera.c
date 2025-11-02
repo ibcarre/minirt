@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:29:29 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/27 20:45:09 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/02 17:12:43 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,14 @@ t_obj	*camera_setup(t_obj *camera)
 	//w = vec_normalize(vec_add_vec(vec_mul_vec(camera->camera->orientation, camera->pos), camera->pos, MINUS));
 	u = vec_normalize(cross(v_up, w));
 	v = vec_normalize(cross(w, u));
-	print_vec("WWW ", w);
-	print_vec("UUU ", u);
-	print_vec("VVV ", v);
 	camera->camera->viewport->vport_u = vec_mul(u, viewport_width);
 	camera->camera->viewport->vport_v = vec_mul(v, -viewport_height);
 	camera->camera->viewport->pixel_delta_u = vec_div(camera->camera->viewport->vport_u, WIDTH);
 	camera->camera->viewport->pixel_delta_v = vec_div(camera->camera->viewport->vport_v, HEIGHT);
 	camera->camera->viewport->pixel_top_left = vec_add_vec(camera->pos, vec_mul(w, foc_length), MINUS);
-	print_vec("z pixel ", camera->camera->viewport->pixel_top_left);
 	camera->camera->viewport->pixel_top_left = vec_add_vec(camera->camera->viewport->pixel_top_left, vec_div(camera->camera->viewport->vport_u, 2), MINUS);
 	camera->camera->viewport->pixel_top_left = vec_add_vec(camera->camera->viewport->pixel_top_left, vec_div(camera->camera->viewport->vport_v, 2), MINUS);
 	camera->camera->viewport->pixel_top_left = vec_add_vec(camera->camera->viewport->pixel_top_left, vec_add_vec(camera->camera->viewport->pixel_delta_u, camera->camera->viewport->pixel_delta_v, ADD), ADD); //viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
-	print_vec("z pixel ", camera->camera->viewport->pixel_top_left);
 	//camera->camera->viewport = vp;
 	return (camera);
 }

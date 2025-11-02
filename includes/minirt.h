@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/29 14:35:32 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/02 17:59:30 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define SAMPLES 5
 # define M_PI 3.14159265358979323846
 # define INTENSITE 150
+# define CORES 8
 
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>
@@ -30,6 +31,7 @@
 # include <limits.h>
 # include <unistd.h>
 # include "../utils/get_next_line.h"
+# include <pthread.h>
 
 typedef struct s_color
 {
@@ -155,7 +157,6 @@ typedef struct s_data {
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
-	int		x;
 	int		y;
 	int		endian;
 }	t_data;
@@ -167,6 +168,13 @@ typedef struct s_vars {
 	t_obj	*camera;
 	t_obj	*am_light;
 }	t_vars;
+
+typedef struct s_global {
+	t_vars			mlx;
+	t_data			*img;
+	t_viewport		*vp;
+	pthread_mutex_t	mutex;
+}	t_global;
 
 void	print_obj_param(t_obj *object);
 t_obj	*parsing(int fd);
