@@ -6,115 +6,13 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/02 18:12:18 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/03 17:27:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //sp 0,-50.5,-100 100 10,0,255
 
 #include "../includes/minirt.h"
-
-void	my_mlx_pixel_put(t_data *data, int height, int width, int color)
-{
-	char	*dst;
-
-	dst = data->addr + (height * data->line_length + width * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
-int	close_window(t_vars *mlx)
-{
-	mlx_destroy_window(mlx->mlx, mlx->win);
-	mlx_destroy_display(mlx->mlx);
-	free(mlx->mlx);
-	free_objs(mlx->first);
-	exit(0);
-}
-
-int	handle_key(int keycode, t_vars *mlx)
-{
-	if (keycode == XK_Escape)
-		close_window(mlx);
-	return (0);
-}
-
-double	my_sq(double x)
-{
-	return (x * x);
-}
-
-int	create_trgb(int t, int r, int g, int b)
-{
-	return (t << 24 | r << 16 | g << 8 | b);
-}
-
-double	hits_sphere(t_ray ray, t_obj *first)
-{
-	t_pos	or_to_oc; //rayon to centre
-	double	a;
-	double	h;
-	double	c;
-	double	delta;
-
-	or_to_oc = vec_add_vec(first->pos, ray.origin, MINUS);
-	a = vec_length(ray.direction) * vec_length(ray.direction);//dot_product(ray.direction, ray.direction);
-	h =  dot_product(ray.direction, or_to_oc); //-2 * dot_product(ray.direction, or_to_oc);
-	c = my_sq(vec_length(or_to_oc)) - my_sq(first->sphere->rayon);//dot_product(cr, cr) - mlx.first->sphere->rayon * mlx.first->sphere->rayon;
-	delta = h * h - a * c;
-	if (delta >= 0)
-	{
-		delta = (h - sqrt(delta)) / (a);
-		if (delta < 0)
-		{
-			delta = (h + sqrt(h * h - a * c)) / a;
-			return (delta);
-		}
-		return (delta); // moins pour obtenir la solution la plus proche de la caméra, return negatif quand on est dans la sphère (forcément...)
-	}
-	return (-1);
-}
-
-t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
-{
-	t_pos	normal;
-	t_pos	t_point;
-
-	t_point = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
-	if (!first)
-		return (vec_init(0, 0, 0));
-	else if (first->type == SPHERE)
-		normal = vec_normalize(vec_add_vec(t_point, first->pos, MINUS));
-	else if (first->type == PLANE)
-			normal = first->plane->normal;
-	if (dot_product(ray.direction, normal) > 0)
-		normal = vec_init(-normal.x, -normal.y, -normal.z);
-	point->normal = normal;
-	return (normal);
-}
-
-double	hits_plane(t_ray ray, t_obj *first)
-{
-	double	denom;
-	t_pos	point;
-	double	t;
-
-	denom = dot_product(first->plane->normal, ray.direction);
-	if (abs_f(denom) > 1e-6)
-	{
-		point = vec_add_vec(first->pos, ray.origin, MINUS);
-		t = dot_product(point, first->plane->normal) / denom;
-		if (t > 1e-6)
-			return (t);
-		return (-1);
-	}
-	return (-1);
-}
-
-// double	hits_cylinder(t_ray ray, t_obj *obj)
-// {
-
-// 	return (-1);
-// }
 
 t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 {
@@ -127,8 +25,8 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 			point->point = hits_sphere(ray, first);
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
-		// else if (first->type == CYLINDER)
-		//  	point->point = hits_cylinder(ray, first);
+		else if (first->type == CYLINDER)
+		 	point->point = hits_cylinder(ray, first);
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/02 17:59:30 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/03 17:26:17 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ typedef struct s_amlight
 	double		ratio;
 }	t_amlight;
 
-typedef struct s_viewport {
+typedef struct s_viewport
+{
 	double		view_h;
 	double		view_w;
 	t_pos		pixel_delta_u;
@@ -102,7 +103,7 @@ typedef struct s_cylinder
 	t_pos		normal;
 }	t_cylinder;
 
-typedef	struct s_ray
+typedef struct s_ray
 {
 	t_pos	origin;
 	t_pos	direction;
@@ -133,26 +134,8 @@ typedef struct s_hit
 	int		type;
 }	t_hit;
 
-// typedef struct s_obj
-// {
-// 	t_cylinder		*cylinder; //setup as NULL si ils existent pas !!!important!!!!
-// 	t_plane			*plane;
-// 	t_sphere		*sphere;
-// 	t_light			*light;
-// 	t_camera		*camera;
-// 	t_amlight		*amlight;
-// }	t_obj;
-// typedef struct s_cylinder
-// {
-// 	t_pos			pos;
-// 	t_color			col;
-// 	double		diameter;
-// 	double		height;
-// 	t_pos		normal;
-// 	struct s_cylinder	*next;
-// } t_cylinder;
-
-typedef struct s_data {
+typedef struct s_data
+{
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
@@ -161,7 +144,8 @@ typedef struct s_data {
 	int		endian;
 }	t_data;
 
-typedef struct s_vars {
+typedef struct s_vars
+{
 	void	*mlx;
 	void	*win;
 	t_obj	*first;
@@ -169,12 +153,20 @@ typedef struct s_vars {
 	t_obj	*am_light;
 }	t_vars;
 
-typedef struct s_global {
+typedef struct s_global
+{
 	t_vars			mlx;
 	t_data			*img;
 	t_viewport		*vp;
 	pthread_mutex_t	mutex;
 }	t_global;
+
+typedef struct s_axis
+{
+	t_pos	u;
+	t_pos	v;
+	t_pos	w;
+}	t_axis;
 
 void	print_obj_param(t_obj *object);
 t_obj	*parsing(int fd);
@@ -215,6 +207,16 @@ t_color	col_mul_col(t_color col, t_color col2);
 void	loading(int i);
 t_pos	cross(t_pos x, t_pos y);
 int		is_rt_file(char *filename);
+int		is_digit(char c);
+void	get_sign(int *sign, char *str, int *i, long *test);
+double	hits_sphere(t_ray ray, t_obj *first);
+t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray);
+double	hits_plane(t_ray ray, t_obj *first);
+void	my_mlx_pixel_put(t_data *data, int height, int width, int color);
+int		close_window(t_vars *mlx);
+int		handle_key(int keycode, t_vars *mlx);
+double	my_sq(double x);
+int	create_trgb(int t, int r, int g, int b);
 
 #endif
 

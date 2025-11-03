@@ -6,33 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 16:32:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/03 16:32:17 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-
-int	is_digit(char c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-void	get_sign(int *sign, char *str, int *i, long *test)
-{
-	*sign = 1;
-	while (str[*i] && str[*i] != '-' && !is_digit(str[*i]))
-	{
-		*i = *i + 1;
-	}
-	if (str[*i] && str[*i] == '-')
-	{
-		*i = *i + 1;
-		*sign = -1;
-		*test = *test + 1;
-	}
-}
 
 int	get_signz(char *str)
 {
@@ -86,7 +64,7 @@ int	intlen(int ent)
 		ent = ent * -1;
 	while (ent > 10)
 	{
-		ent = ent/10;
+		ent = ent / 10;
 		len++;
 	}
 	return (len + 1);
@@ -127,14 +105,3 @@ double	ft_atof(char **str, int *works)
 	res = res / pow(10, intlen(dec));
 	return (res * sign);
 }
-
-
-// int main(int av, char **ac)
-// {
-// 	int works;
-// 	works = 1;
-// 	printf("%f\n", ft_atof(&(ac[1]), &works));
-// 	if (!works)
-// 		printf("DOESNT WORK\n");
-// 	printf("%s\n", ac[1]);
-// }
