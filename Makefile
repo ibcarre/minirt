@@ -24,6 +24,8 @@ SRCS = main.c \
 	vector_math/color.c\
 	render/render_utils.c\
 	vector_math/vec2.c\
+	render/mlx_utils.c\
+	render/hit_detection.c\
 
 OBJ_DIR = obj
 

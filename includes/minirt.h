@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 17:26:17 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/03 17:29:15 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,8 @@ void	my_mlx_pixel_put(t_data *data, int height, int width, int color);
 int		close_window(t_vars *mlx);
 int		handle_key(int keycode, t_vars *mlx);
 double	my_sq(double x);
-int	create_trgb(int t, int r, int g, int b);
+int		create_trgb(int t, int r, int g, int b);
+// double	hits_cylinder(t_ray ray, t_obj *obj)
 
 #endif
 

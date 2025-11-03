@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 17:19:43 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 17:24:32 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/03 17:28:51 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ double	hits_plane(t_ray ray, t_obj *first)
 	return (-1);
 }
 
-double	hits_cylinder(t_ray ray, t_obj *obj)
-{
-	return (-1);
-}
+// double	hits_cylinder(t_ray ray, t_obj *obj)
+// {
+// 	return (-1);
+// }

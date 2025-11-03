@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 17:27:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/03 17:29:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 			point->point = hits_sphere(ray, first);
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
-		else if (first->type == CYLINDER)
-		 	point->point = hits_cylinder(ray, first);
+		// else if (first->type == CYLINDER)
+		//  	point->point = hits_cylinder(ray, first);
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
