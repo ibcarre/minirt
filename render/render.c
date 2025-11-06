@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 13:37:00 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 19:10:00 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,157 +14,12 @@
 
 #include "../includes/minirt.h"
 
-t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
+void	get_y(t_global *glob, t_pos *xy)
 {
-	t_cylhit	p;
-
-	point->hit = 0;
-	point->closest_pt.z = -1;
-	point->point = -1;
-	while (first)
-	{
-		if (first->type == SPHERE)
-			point->point = hits_sphere(ray, first);
-		else if (first->type == PLANE)
-			point->point = hits_plane(ray, first);
-		else if (first->type == CYLINDER)
-		{
-		 	p = hits_cylinder(ray, first);
-			point->point = p.t;
-		}
-		if (point->point >= 0)
-		{
-			if (point->hit == 0 || point->point < point->closest_pt.z)
-			{
-				point->type = first->type;
-				point->closest_pt.z = point->point;
-				point->col = first->col;
-				point->hit = 1;
-				if (point->type == CYLINDER)
-					point->cyl_point = p;
-				get_normal(first, point, ray);
-			}
-			point->point = -1;
-		}
-		first = first->next;
-	}
-	point->closest_pt = vec_add_vec(ray.origin, vec_mul(ray.direction, point->closest_pt.z), ADD);
-	return (*point);
-}
-
-
-t_hit	check_shadow(t_ray ray, t_obj *first, t_hit *shadow, double	length)
-{
-	double	length_hit;
-	t_hit	point;
-
-	shadow->hit = 0;
-	loop_objects(ray, first, &point);
-	if (point.hit)
-	{
-		length_hit = vec_length_squared(vec_add_vec(point.closest_pt, ray.origin, MINUS));
-		if (length_hit < length + 1e-6)
-		{
-			shadow->hit = 1;
-			return (*shadow);
-		}
-	}
-	return (*shadow);
-}
-
-t_color	check_lights(t_ray ray, t_vars mlx, t_hit point)
-{
-	t_hit	shadow;
-	t_pos	col;
-	t_pos	lumcol;
-	t_color	res;
-	double	length;
-	double	intensite;
-	t_obj	*first;
-
-	col = vec_init(0,0,0);
-	first = mlx.first;
-	while(mlx.first)
-	{
-		if (mlx.first->type == LIGHT)
-		{
-			ray.direction = vec_add_vec(mlx.first->pos, ray.origin, MINUS);
-			length = vec_length_squared(ray.direction);
-			ray.direction = vec_normalize(ray.direction);
-			check_shadow(ray, first, &shadow, length);
-			if (!(shadow.hit))
-			{
-				intensite = ft_clamp(dot_product(vec_normalize(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS)), point.normal), 0, 1) * INTENSITE;
-				intensite = intensite / vec_length_squared(vec_add_vec(mlx.first->pos, point.closest_pt, MINUS));
-				lumcol.x = mlx.first->col.x * mlx.first->light->ratio * intensite * point.col.x;
-				lumcol.y = mlx.first->col.y * mlx.first->light->ratio * intensite * point.col.y;
-				lumcol.z = mlx.first->col.z * mlx.first->light->ratio * intensite * point.col.z;
-				col = vec_add_vec(lumcol, col, ADD);
-			}
-		}
-		mlx.first = mlx.first->next;
-	}
-	lumcol.x = mlx.am_light->col.x * mlx.am_light->amlight->ratio;
-	lumcol.y = mlx.am_light->col.y * mlx.am_light->amlight->ratio;
-	lumcol.z = mlx.am_light->col.z * mlx.am_light->amlight->ratio;
-	col = vec_add_vec(lumcol, col, ADD);
-	col.x = col.x * point.col.x;
-	col.y = col.y * point.col.y;
-	col.z = col.z * point.col.z;
-	res.x = col.x / 255;
-	res.y = col.y / 255;
-	res.z = col.z / 255;
-	return (res);
-}
-
-t_color	check_meshes(t_ray ray, t_vars mlx)
-{
-	t_color col;
-	t_hit	point;
-	t_color	lumcol;
-
-	loop_objects(ray, mlx.first, &point);
-	col = col_mul(mlx.am_light->col, 0.8);
-	if (point.hit)
-	{
-		ray.origin = vec_add_vec(point.closest_pt, vec_mul(point.normal, 0.0001), ADD);
-		lumcol = check_lights(ray, mlx, point); //col_mul(col_init(0,0,255), intensite * 0.5);
-		return(lumcol);
-	}
-	return (col);
-}
-
-void	ray_color(t_ray ray, t_pos px, t_pos xy, t_global *global) //t_vars mlx, t_data *img, 
-{
-	t_color		col;
-	t_obj	*camera;
-	int	i;
-	t_viewport *vp;
-	double rand;
-
-	i = 0;
-	camera = global->mlx.camera;
-	vp = camera->camera->viewport;
-	col = col_init(0,0,0);
-	ray.origin = global->mlx.camera->pos;
-	while (i < SAMPLES)
-	{
-		rand = xy.x + (myrand(px.y + i) - 0.5);
-		px = vec_add_vec(vp->pixel_top_left, vec_mul(vp->pixel_delta_u, rand), ADD);
-		rand = xy.y + (myrand(px.x + i) - 0.5);
-		px = vec_add_vec(px, vec_mul(vp->pixel_delta_v, rand), ADD);
-		ray.direction = vec_normalize(vec_add_vec(px, global->mlx.camera->pos, MINUS)); //vecteur qui part de la camera vers le pixel voulu
-		col = col_add_col(check_meshes(ray, global->mlx), col);
-		i++;
-	}
-	col.x = (int)ft_clamp((col.x/SAMPLES), 0, 255);
-	col.y = (int)ft_clamp((col.y/SAMPLES), 0, 255);
-	col.z = (int)ft_clamp((col.z/SAMPLES), 0, 255);
-	i = create_trgb(0, col.x, col.y, col.z);
-	pthread_mutex_lock(&(global->mutex));
-	my_mlx_pixel_put(global->img, xy.y, xy.x, i);
-	pthread_mutex_unlock(&(global->mutex));
-	return ;
+	pthread_mutex_lock(&(glob->mutex));
+	glob->img->y = glob->img->y + 1;
+	xy->y = glob->img->y;
+	pthread_mutex_unlock(&(glob->mutex));
 }
 
 void	*routine(void *param)
@@ -183,27 +38,24 @@ void	*routine(void *param)
 		xy.x = 0;
 		while (xy.x < WIDTH)
 		{
-			pixel = vec_add_vec(global->vp->pixel_top_left, vec_mul(global->vp->pixel_delta_u, xy.x), ADD);
-			pixel = vec_add_vec(pixel, vec_mul(global->vp->pixel_delta_v, xy.y), ADD);
+			pixel = vec_add_vec(global->vp->pixel_top_left,
+					vec_mul(global->vp->pixel_delta_u, xy.x), ADD);
+			pixel = vec_add_vec(pixel,
+					vec_mul(global->vp->pixel_delta_v, xy.y), ADD);
 			ray_color(ray, pixel, xy, global);
 			xy.x = xy.x + 1;
 		}
-		pthread_mutex_lock(&(global->mutex));
-		global->img->y = global->img->y + 1;
-		xy.y = global->img->y;
-		pthread_mutex_unlock(&(global->mutex));
+		get_y(global, &xy);
 		loading(xy.y);
 	}
 	return (NULL);
 }
 
-
 void	render_image(t_vars mlx, t_data *img)
 {
-
 	pthread_t	threads[CORES];
 	t_global	glob;
-	int	i;
+	int			i;
 
 	img->y = 0;
 	i = 0;
@@ -229,18 +81,19 @@ void	render_image(t_vars mlx, t_data *img)
 
 void	render(t_obj *first)
 {
-	t_vars mlx;
+	t_vars	mlx;
 	t_data	img;
 
 	mlx.first = first ;
 	mlx.mlx = mlx_init();
 	mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "blender");
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	img.addr = mlx_get_data_addr(img.img,
+			&img.bits_per_pixel, &img.line_length, &img.endian);
 	render_image(mlx, &img);
 	printf("\n");
 	mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
-	mlx_hook(mlx.win, 17, 1L<<0, &close_window, &mlx);
+	mlx_hook(mlx.win, 17, 1L << 0, &close_window, &mlx);
 	mlx_key_hook(mlx.win, &handle_key, &mlx);
 	mlx_loop(mlx.mlx);
 }

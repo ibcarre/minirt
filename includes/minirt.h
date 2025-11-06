@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 14:01:24 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 19:12:49 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,13 @@ typedef struct s_axis
 	t_pos	w;
 }	t_axis;
 
-void		print_obj_param(t_obj *object);
+typedef struct s_shading
+{
+	double	intensity;
+	t_pos	lumcol;
+	t_pos	col;
+}	t_shading;
+
 t_obj		*parsing(int fd);
 void		free_objs(t_obj *first);
 char		*skip_spaces(char *line);
@@ -206,7 +212,6 @@ double		myrand(int seed);
 t_color		col_init(int x, int y, int z);
 t_color		col_add_col(t_color col, t_color color);
 double		vec_length_squared(t_pos vec);
-t_pos		random_unit_vec_dir(int seed, t_pos dir);
 t_color		col_mul(t_color col, double x);
 void		print_vec(char *s, t_pos vec);
 t_obj		*get_amlight(t_vars mlx);
@@ -226,8 +231,20 @@ int			handle_key(int keycode, t_vars *mlx);
 double		my_sq(double x);
 int			create_trgb(int t, int r, int g, int b);
 t_cylhit	hits_cylinder(t_ray ray, t_obj *obj);
+t_obj		*fill_plane(char *line, t_obj **obj);
+t_obj		*fill_camera(char *line, t_obj **obj);
+t_obj		*fill_light(char *line, t_obj **obj);
+t_obj		*fill_sphere(char *line, t_obj **obj);
+t_obj		*fill_alight(char *line, t_obj **obj);
+t_pos		col_mul2(t_color col, double x);
+t_pos		col_mul_vec(t_color col, t_pos vec);
+t_color		col_div(t_pos col, double x);
+void		ray_color(t_ray ray, t_pos px, t_pos xy, t_global *global);
+void		shading(t_shading *shader, t_vars mlx, t_hit point);
+t_color		check_lights(t_ray ray, t_vars mlx, t_hit point);
+t_color		check_meshes(t_ray ray, t_vars mlx);
+void		show_img(t_color col, t_global *global, t_pos xy);
+t_hit		loop_objects(t_ray ray, t_obj *first, t_hit *point);
+t_hit		check_shadow(t_ray ray, t_obj *first, t_hit *shadow, double length);
 
 #endif
-
-//setup sphere->next => sphere 
-// camera et ambient lighting dans OBJ

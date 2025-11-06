@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:51 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 13:27:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 19:00:28 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	main(int argv, char **argc)
 {
 	t_obj	*first;
+	int		fd;
 
-	int	fd;
 	if (argv != 2)
 		return (1);
 	if (is_rt_file(argc[1]) == -1)

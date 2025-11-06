@@ -6,13 +6,13 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/05 17:49:14 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 15:41:58 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_obj	*init_obj()
+t_obj	*init_obj(void)
 {
 	t_obj	*obj;
 
@@ -34,8 +34,6 @@ t_obj	*init_obj()
 	obj->pos.z = 0;
 	return (obj);
 }
-
-//check chaque valeur si valeur mauvaise print warning sur terminal et mise default value
 
 t_obj	*check_type(char *line, t_obj *obj)
 {
@@ -110,7 +108,6 @@ void	check_nb(t_obj **obj)
 		*obj = NULL;
 	}
 }
-
 
 t_obj	*parsing(int fd)
 {

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 17:19:43 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/05 15:23:46 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 19:19:23 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ double	hits_sphere(t_ray ray, t_obj *first)
 	return (-1);
 }
 
+t_pos	get_cyl_norm(t_pos t_point, t_obj *first)
+{
+	t_pos	c_hit;
+	double	proj;
+	t_pos	proj_p;
+
+	c_hit = vec_add_vec(t_point, first->pos, MINUS);
+	proj = dot_product(vec_normalize(first->cylinder->normal), c_hit);
+	proj_p = vec_add_vec(first->pos,
+			vec_mul(vec_normalize(first->cylinder->normal), proj), ADD);
+	return (vec_normalize(vec_add_vec(t_point, proj_p, MINUS)));
+}
+
 t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 {
 	t_pos	normal;
@@ -56,15 +69,7 @@ t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 		if (point->cyl_point.endcap)
 			normal = vec_normalize(first->cylinder->normal);
 		else
-		{
-			t_pos	c_hit = vec_add_vec(t_point, first->pos, MINUS);
-			double	proj = dot_product(vec_normalize(first->cylinder->normal), c_hit);
-			t_pos	proj_p = vec_add_vec(first->pos, vec_mul(vec_normalize(first->cylinder->normal), proj), ADD);
-			normal = vec_normalize(vec_add_vec(t_point, proj_p, MINUS));
-			// t_pos	c_hit = vec_add_vec(first->pos, t_point, MINUS);
-			// t_pos	hit = vec_mul(vec_normalize(first->cylinder->normal), point->closest_pt.z);
-			// normal = vec_normalize(vec_add_vec(c_hit, hit, MINUS));
-		}
+			normal = get_cyl_norm(t_point, first);
 	}
 	if (dot_product(ray.direction, normal) > 0)
 		normal = vec_init(-normal.x, -normal.y, -normal.z);
@@ -92,24 +97,22 @@ double	hits_plane(t_ray ray, t_obj *first)
 
 double	check_caps(t_obj *obj, t_pos top, t_pos bot, t_ray ray)
 {
-	t_pos axe = vec_normalize(obj->cylinder->normal);
-	// if (dot_product(ray.direction, axe) < 0)
-	// 	axe = vec_init(-axe.x, -axe.y, -axe.z);
-	double tc = dot_product(axe, vec_add_vec(top, ray.origin, MINUS)) / dot_product(axe, ray.direction);
-	double tc2;
+	t_pos	axe;
+	double	tc;
+	double	tc2;
+	t_pos	ic;
 
-	t_pos ic = vec_add_vec(ray.origin, vec_mul(ray.direction, tc), ADD);
-	if (vec_length(vec_add_vec(ic, top, MINUS)) > obj->cylinder->rayon){
+	axe = vec_normalize(obj->cylinder->normal);
+	tc = dot_product(axe, vec_add_vec(top, ray.origin, MINUS))
+		/ dot_product(axe, ray.direction);
+	ic = vec_add_vec(ray.origin, vec_mul(ray.direction, tc), ADD);
+	if (vec_length(vec_add_vec(ic, top, MINUS)) > obj->cylinder->rayon)
 		tc = -1 ;
-	}
-	tc2 = dot_product(axe, vec_add_vec(bot, ray.origin, MINUS)) / dot_product(axe, ray.direction);
+	tc2 = dot_product(axe, vec_add_vec(bot, ray.origin, MINUS))
+		/ dot_product(axe, ray.direction);
 	ic = vec_add_vec(ray.origin, vec_mul(ray.direction, tc2), ADD);
-	// printf("TC2 %f\n", tc2);
-	// print_vec("ray dir ", ray.direction);
-	// printf("vec length %f\n", vec_length(vec_add_vec(ic, bot, MINUS)));
-	if (vec_length(vec_add_vec(ic, bot, MINUS)) > obj->cylinder->rayon){
+	if (vec_length(vec_add_vec(ic, bot, MINUS)) > obj->cylinder->rayon)
 		tc2 = -1;
-	}
 	if (tc < 0)
 		return (tc2);
 	return (tc);

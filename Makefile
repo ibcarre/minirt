@@ -13,14 +13,18 @@ SRCS = main.c \
 	parsing/parsing_utils.c\
 	parsing/parsing.c\
 	parsing/parsing_fill.c\
+	parsing/parsing_fill2.c\
 	parsing/parsing_fill_utils.c\
 	utils/ft_atof.c\
 	utils/ft_atof_2.c\
 	render/render.c\
+	render/render2.c\
+	render/render3.c\
 	vector_math/vec.c\
 	vector_math/vec_on_vec.c\
 	render/camera.c\
 	utils/rand.c\
+	utils/col.c\
 	vector_math/color.c\
 	render/render_utils.c\
 	vector_math/vec2.c\
