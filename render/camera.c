@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:29:29 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 17:09:57 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 13:19:19 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ t_axis	get_local_orientation(t_pos	or)
 	t_pos	v_up;
 	t_axis	new;
 
-	v_up = vec_init(0, 1, 0);
+	or = vec_normalize(or);
+	print_vec("ORIENTATION ", or);
+	if (or.y != 1 && or.y != -1)
+		v_up = vec_init(0, 1, 0);
+	else
+		v_up = vec_init(0, 0, 1);
 	new.w = vec_mul(or, -1);
 	new.u = vec_normalize(cross(v_up, new.w));
 	new.v = vec_normalize(cross(new.w, new.u));

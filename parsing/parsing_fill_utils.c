@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/13 15:49:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/22 02:52:56 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 14:10:04 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ int	fill_col(t_obj *obj, char **line)
 {
 	int	i;
 	int	commas;
+	int	works;
 
 	i = 0;
 	commas = 0;
+	works = 1;
 	*line = skip_spaces(*line);
 	while ((*line)[i] && !ft_isspace((*line)[i]))
 	{
@@ -35,13 +37,15 @@ int	fill_col(t_obj *obj, char **line)
 			commas ++;
 		i++;
 	}
-	if (commas != 2)
+	if (commas != 2 || (*line)[i - 1] == ',')
 		return (0);
-	(obj)->col.x = ft_atoi(line);
+	(obj)->col.x = ft_atoi(line, &works);
 	i = 1;
-	(obj)->col.y = ft_atoi(line);
+	(obj)->col.y = ft_atoi(line, &works);
 	i = 1;
-	(obj)->col.z = ft_atoi(line);
+	(obj)->col.z = ft_atoi(line, &works);
+	if (!works)
+		return (0);
 	return (check_col(obj));
 }
 

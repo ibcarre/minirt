@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 17:29:15 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 14:01:24 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,20 +118,28 @@ typedef struct s_obj
 	t_plane			*plane;
 	t_sphere		*sphere;
 	t_light			*light;
-	t_camera		*camera; //pas de next => pas 2 cameras dans une scène
-	t_amlight		*amlight; //pas de next amlight non plus
+	t_camera		*camera;
+	t_amlight		*amlight;
 	struct s_obj	*next;
 }	t_obj;
 
+typedef struct s_cylhit
+{
+	double	t;
+	int		endcap;
+	int		body;
+}	t_cylhit;
+
 typedef struct s_hit
 {
-	double	point;
-	t_pos	closest_pt;
-	int		hit;
-	t_color	col;
-	t_pos	normal;
-	double	delta;
-	int		type;
+	double		point;
+	t_pos		closest_pt;
+	int			hit;
+	t_color		col;
+	t_pos		normal;
+	double		delta;
+	int			type;
+	t_cylhit	cyl_point;
 }	t_hit;
 
 typedef struct s_data
@@ -168,56 +176,56 @@ typedef struct s_axis
 	t_pos	w;
 }	t_axis;
 
-void	print_obj_param(t_obj *object);
-t_obj	*parsing(int fd);
-void	free_objs(t_obj *first);
-char	*skip_spaces(char *line);
-t_obj	*get_last(t_obj *first);
-void	fill_obj(char *line, t_obj **last);
-double	ft_atof(char **str, int *works);
-int		ft_atoi(char **str);
-int		is_digit(char c);
-int		fill_col(t_obj *obj, char **line);
-int		fill_pos(t_obj *obj, char **line);
-int		fill_or(t_pos *pos, char **line);
-double	ft_clamp(double nb, double min, double max);
-void	render(t_obj *first);
-t_pos	vec_div(t_pos vec, double nb);
-t_pos	vec_add(t_pos vec, double nb, int op);
-t_pos	vec_mul(t_pos vec, double nb);
-t_pos	vec_init(double x, double y, double z);
-t_pos	vec_div_vec(t_pos vec, t_pos vec2);
-t_pos	vec_add_vec(t_pos vec, t_pos vec2, int nb);
-t_pos	vec_mul_vec(t_pos vec, t_pos vec2);
-double	vec_length(t_pos vec);
-t_pos	vec_normalize(t_pos vec);
-double	dot_product(t_pos vec, t_pos vec2);
-t_obj	*camera_setup(t_obj *camera);
-double	rand_min_max(int seed, int min, int max);
-double	myrand(int seed);
-t_color	col_init(int x, int y, int z);
-t_color	col_add_col(t_color col, t_color color);
-double	vec_length_squared(t_pos vec);
-t_pos	random_unit_vec_dir(int seed, t_pos dir);
-t_color	col_mul(t_color col, double x);
-void	print_vec(char *s, t_pos vec);
-t_obj	*get_amlight(t_vars mlx);
-double	abs_f(double x);
-t_color	col_mul_col(t_color col, t_color col2);
-void	loading(int i);
-t_pos	cross(t_pos x, t_pos y);
-int		is_rt_file(char *filename);
-int		is_digit(char c);
-void	get_sign(int *sign, char *str, int *i, long *test);
-double	hits_sphere(t_ray ray, t_obj *first);
-t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray);
-double	hits_plane(t_ray ray, t_obj *first);
-void	my_mlx_pixel_put(t_data *data, int height, int width, int color);
-int		close_window(t_vars *mlx);
-int		handle_key(int keycode, t_vars *mlx);
-double	my_sq(double x);
-int		create_trgb(int t, int r, int g, int b);
-// double	hits_cylinder(t_ray ray, t_obj *obj)
+void		print_obj_param(t_obj *object);
+t_obj		*parsing(int fd);
+void		free_objs(t_obj *first);
+char		*skip_spaces(char *line);
+t_obj		*get_last(t_obj *first);
+void		fill_obj(char *line, t_obj **last);
+double		ft_atof(char **str, int *works);
+int			ft_atoi(char **str, int *works);
+int			is_digit(char c);
+int			fill_col(t_obj *obj, char **line);
+int			fill_pos(t_obj *obj, char **line);
+int			fill_or(t_pos *pos, char **line);
+double		ft_clamp(double nb, double min, double max);
+void		render(t_obj *first);
+t_pos		vec_div(t_pos vec, double nb);
+t_pos		vec_add(t_pos vec, double nb, int op);
+t_pos		vec_mul(t_pos vec, double nb);
+t_pos		vec_init(double x, double y, double z);
+t_pos		vec_div_vec(t_pos vec, t_pos vec2);
+t_pos		vec_add_vec(t_pos vec, t_pos vec2, int nb);
+t_pos		vec_mul_vec(t_pos vec, t_pos vec2);
+double		vec_length(t_pos vec);
+t_pos		vec_normalize(t_pos vec);
+double		dot_product(t_pos vec, t_pos vec2);
+t_obj		*camera_setup(t_obj *camera);
+double		rand_min_max(int seed, int min, int max);
+double		myrand(int seed);
+t_color		col_init(int x, int y, int z);
+t_color		col_add_col(t_color col, t_color color);
+double		vec_length_squared(t_pos vec);
+t_pos		random_unit_vec_dir(int seed, t_pos dir);
+t_color		col_mul(t_color col, double x);
+void		print_vec(char *s, t_pos vec);
+t_obj		*get_amlight(t_vars mlx);
+double		abs_f(double x);
+t_color		col_mul_col(t_color col, t_color col2);
+void		loading(int i);
+t_pos		cross(t_pos x, t_pos y);
+int			is_rt_file(char *filename);
+int			is_digit(char c);
+void		get_sign(int *sign, char *str, int *i, long *test);
+double		hits_sphere(t_ray ray, t_obj *first);
+t_pos		get_normal(t_obj *first, t_hit *point, t_ray ray);
+double		hits_plane(t_ray ray, t_obj *first);
+void		my_mlx_pixel_put(t_data *data, int height, int width, int color);
+int			close_window(t_vars *mlx);
+int			handle_key(int keycode, t_vars *mlx);
+double		my_sq(double x);
+int			create_trgb(int t, int r, int g, int b);
+t_cylhit	hits_cylinder(t_ray ray, t_obj *obj);
 
 #endif
 

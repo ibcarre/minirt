@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 17:29:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 13:37:00 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 {
+	t_cylhit	p;
+
 	point->hit = 0;
 	point->closest_pt.z = -1;
 	point->point = -1;
@@ -25,8 +27,11 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 			point->point = hits_sphere(ray, first);
 		else if (first->type == PLANE)
 			point->point = hits_plane(ray, first);
-		// else if (first->type == CYLINDER)
-		//  	point->point = hits_cylinder(ray, first);
+		else if (first->type == CYLINDER)
+		{
+		 	p = hits_cylinder(ray, first);
+			point->point = p.t;
+		}
 		if (point->point >= 0)
 		{
 			if (point->hit == 0 || point->point < point->closest_pt.z)
@@ -35,6 +40,8 @@ t_hit	loop_objects(t_ray ray, t_obj *first, t_hit *point)
 				point->closest_pt.z = point->point;
 				point->col = first->col;
 				point->hit = 1;
+				if (point->type == CYLINDER)
+					point->cyl_point = p;
 				get_normal(first, point, ray);
 			}
 			point->point = -1;
@@ -231,7 +238,6 @@ void	render(t_obj *first)
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	render_image(mlx, &img);
-	write(1, "\rRENDERING 100%", 15);
 	printf("\n");
 	mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
 	mlx_hook(mlx.win, 17, 1L<<0, &close_window, &mlx);

@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 16:32:01 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/05 17:49:14 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	check_nb(t_obj **obj)
 		*obj = (*obj)->next;
 	}
 	*obj = first;
-	if (al > 1 || camera != 1)
+	if (al != 1 || camera != 1)
 	{
 		free_objs(first);
 		*obj = NULL;

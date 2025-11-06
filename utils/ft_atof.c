@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/27 13:33:59 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/03 16:32:17 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 14:00:40 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	get_signz(char *str)
 	return (sign);
 }
 
-int	ft_atoi(char **str)
+int	ft_atoi(char **str, int *works)
 {
 	long	res;
 	int		i;
@@ -45,7 +45,7 @@ int	ft_atoi(char **str)
 			break ;
 		if (res * 10 + (*str)[i] - '0' > test || !is_digit((*str)[i]))
 		{
-			printf("WAR : Weird parsing. Moving on\n");
+			*works = 0;
 			break ;
 		}
 		res = res * 10 + (*str)[i] - '0';
@@ -87,7 +87,7 @@ double	ft_atof(char **str, int *works)
 
 	i = 0;
 	sign = get_signz(*str);
-	ent = ft_atoi(str);
+	ent = ft_atoi(str, works);
 	if (ft_isspace((*str)[i]) || !(*str)[i] || (*str)[i] == ',')
 		return (i++, *str = &((*str)[i]), ent);
 	if (((*str)[i] && (*str)[i] != '.') || (!*works))
@@ -97,7 +97,7 @@ double	ft_atof(char **str, int *works)
 	}
 	i = i + 1;
 	*str = &((*str)[i]);
-	dec = ft_atoi(str);
+	dec = ft_atoi(str, works);
 	ent = ft_abs(ent) * pow(10, intlen(dec));
 	if (intlen(dec) >= 6)
 		*works = 0;

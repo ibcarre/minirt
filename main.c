@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:51 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/09 16:45:37 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 13:27:01 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ int	main(int argv, char **argc)
 	int	fd;
 	if (argv != 2)
 		return (1);
-	//check si argc[1] est bien un fichier rt
 	if (is_rt_file(argc[1]) == -1)
-	{
 		return (1);
-	}
 	fd = open(argc[1], O_RDONLY);
 	if (fd < 0)
 		return (perror("Error"), 2);

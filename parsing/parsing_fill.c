@@ -6,20 +6,11 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 11:09:35 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/10/29 14:35:49 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/06 14:08:27 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-
-// void	ft_ceil(double *ratio)
-// {
-// 	printf("WAR : RATIO VALUE TOO LOW/HIGH IS NOW DEFAULT VALUE\n");
-// 	if (*ratio < 0)
-// 		*ratio = 0;
-// 	else
-// 		*ratio = 1;
-// }
 
 t_obj	*fill_alight(char *line, t_obj **obj)
 {
