@@ -6,7 +6,7 @@
 /*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 19:12:49 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/07 13:14:37 by ibtihal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ typedef struct s_cylhit
 {
 	double	t;
 	int		endcap;
-	int		body;
 }	t_cylhit;
 
 typedef struct s_hit
@@ -182,6 +181,24 @@ typedef struct s_shading
 	t_pos	lumcol;
 	t_pos	col;
 }	t_shading;
+
+typedef struct s_cyl
+{
+	t_pos		center;
+	t_pos		axe;
+	t_pos		top;
+	t_pos		bot;
+	t_pos		rdxaxe;
+	double		r2;
+	double		ra;
+	double		aa;
+	t_pos		b0;
+	double		b;
+	double		d;
+	double		delta;
+	double		t;
+	t_cylhit	p;
+}	t_cyl;
 
 t_obj		*parsing(int fd);
 void		free_objs(t_obj *first);

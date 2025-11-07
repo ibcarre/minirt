@@ -20,6 +20,7 @@ SRCS = main.c \
 	render/render.c\
 	render/render2.c\
 	render/render3.c\
+	render/hit_detection2.c\
 	vector_math/vec.c\
 	vector_math/vec_on_vec.c\
 	render/camera.c\
