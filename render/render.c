@@ -6,7 +6,7 @@
 /*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/08 12:55:24 by ibaaziz          ###   ########.fr       */
+/*   Updated: 2025/11/08 14:06:54 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,51 @@ void	render_image(t_vars mlx, t_data *img)
 	}
 }
 
-void	render(t_obj *first)
+void	handle_err(t_vars *mlx, void *img, int err)
+{
+	if (err == 0)
+	{
+		mlx_destroy_display(mlx->mlx);
+		free(mlx->mlx);
+		return ;
+	}
+	else if (err == 1)
+	{
+		mlx_destroy_display(mlx->mlx);
+		mlx_destroy_window(mlx->mlx, mlx->win);
+		free(mlx->mlx);
+		return ;
+	}
+	else if (err == 2 && img != NULL)
+	{
+		mlx_destroy_display(mlx->mlx);
+		mlx_destroy_window(mlx->mlx, mlx->win);
+		mlx_destroy_image(mlx->mlx, mlx->img.img);
+		free(mlx->mlx);
+		return ;
+	}
+	return ;
+}
+
+int	render(t_obj *first)
 {
 	t_vars	mlx;
 	t_data	img;
 
 	mlx.first = first;
 	mlx.mlx = mlx_init();
+	if (!(mlx.mlx))
+		return (write(2, "mlx init fail\n", 14));
 	mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "blender");
+	if (!(mlx.win))
+		return (handle_err(&mlx, img.img, 0), write(2, "mlx win fail\n", 14));
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
+	if (!img.img)
+		return (handle_err(&mlx, img.img, 1), write(2, "img fail\n", 9));
 	img.addr = mlx_get_data_addr(img.img,
 			&img.bits_per_pixel, &img.line_length, &img.endian);
+	if (!img.addr)
+		return (handle_err(&mlx, img.img, 2), write(2, "img fail\n", 9));
 	mlx.img = img;
 	render_image(mlx, &img);
 	printf("\n");
@@ -97,4 +131,5 @@ void	render(t_obj *first)
 	mlx_hook(mlx.win, 17, 1L << 0, &close_window, &mlx);
 	mlx_key_hook(mlx.win, &handle_key, &mlx);
 	mlx_loop(mlx.mlx);
+	return (0);
 }

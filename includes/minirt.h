@@ -6,7 +6,7 @@
 /*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/08 12:54:47 by ibaaziz          ###   ########.fr       */
+/*   Updated: 2025/11/08 14:03:02 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ int			fill_col(t_obj *obj, char **line);
 int			fill_pos(t_obj *obj, char **line);
 int			fill_or(t_pos *pos, char **line);
 double		ft_clamp(double nb, double min, double max);
-void		render(t_obj *first);
+int			render(t_obj *first);
 t_pos		vec_div(t_pos vec, double nb);
 t_pos		vec_add(t_pos vec, double nb, int op);
 t_pos		vec_mul(t_pos vec, double nb);
