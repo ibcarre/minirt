@@ -6,7 +6,7 @@
 /*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/08 14:06:54 by ibaaziz          ###   ########.fr       */
+/*   Updated: 2025/11/08 18:36:18 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ void	render_image(t_vars mlx, t_data *img)
 	pthread_mutex_init(&(glob.mutex), NULL);
 	while (i < CORES)
 	{
-		pthread_create(&(threads[i]), NULL, routine, &glob);
+		if (pthread_create(&(threads[i]), NULL, routine, &glob) != 0)
+			return ;
 		i++;
 	}
 	i = 0;
@@ -79,8 +80,9 @@ void	render_image(t_vars mlx, t_data *img)
 	}
 }
 
-void	handle_err(t_vars *mlx, void *img, int err)
+void	handle_err(t_vars *mlx, void *img, int err, t_obj *first)
 {
+	free_objs(first);
 	if (err == 0)
 	{
 		mlx_destroy_display(mlx->mlx);
@@ -92,6 +94,7 @@ void	handle_err(t_vars *mlx, void *img, int err)
 		mlx_destroy_display(mlx->mlx);
 		mlx_destroy_window(mlx->mlx, mlx->win);
 		free(mlx->mlx);
+		write(2, "mlx win fail\n", 14);
 		return ;
 	}
 	else if (err == 2 && img != NULL)
@@ -113,17 +116,17 @@ int	render(t_obj *first)
 	mlx.first = first;
 	mlx.mlx = mlx_init();
 	if (!(mlx.mlx))
-		return (write(2, "mlx init fail\n", 14));
+		return (free_objs(first), write(2, "mlx init fail\n", 14));
 	mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "blender");
 	if (!(mlx.win))
-		return (handle_err(&mlx, img.img, 0), write(2, "mlx win fail\n", 14));
+		return (handle_err(&mlx, img.img, 0, first), 1);
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
 	if (!img.img)
-		return (handle_err(&mlx, img.img, 1), write(2, "img fail\n", 9));
+		return (handle_err(&mlx, img.img, 1, first), write(2, "img fail\n", 9));
 	img.addr = mlx_get_data_addr(img.img,
 			&img.bits_per_pixel, &img.line_length, &img.endian);
 	if (!img.addr)
-		return (handle_err(&mlx, img.img, 2), write(2, "img fail\n", 9));
+		return (handle_err(&mlx, img.img, 2, first), write(2, "img fail\n", 9));
 	mlx.img = img;
 	render_image(mlx, &img);
 	printf("\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:41 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 15:41:58 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/08 18:25:10 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ t_obj	*parsing(int fd)
 
 	first = NULL;
 	line = get_next_line(fd);
+	if (!line)
+		return (NULL);
 	while (line)
 	{
 		first = get_obj(line, first);

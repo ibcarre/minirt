@@ -6,7 +6,7 @@
 /*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 22:13:51 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/08 13:52:15 by ibaaziz          ###   ########.fr       */
+/*   Updated: 2025/11/08 18:14:28 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argv, char **argc)
 	int		fd;
 
 	if (argv != 2)
-		return (1);
+		return (write(2, "ONE FILE ONLY\n", 14), 1);
 	if (is_rt_file(argc[1]) == -1)
 		return (1);
 	fd = open(argc[1], O_RDONLY);

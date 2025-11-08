@@ -1,7 +1,7 @@
 NAME = miniRT
 
 CC = cc
-CFLAGS =  -Wall -Wextra -Werror -g -MMD
+CFLAGS =  -Wall -Wextra -Werror -g3 -MMD
 LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm -I./includes/minirt.h
 
 SRCS = main.c \
