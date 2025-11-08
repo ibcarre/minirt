@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 18:48:46 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/08 12:27:10 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,17 +91,16 @@ void	show_img(t_color col, t_global *global, t_pos xy)
 	pthread_mutex_unlock(&(global->mutex));
 }
 
-void	ray_color(t_ray ray, t_pos px, t_pos xy, t_global *global)
+void	ray_color(t_pos px, t_pos xy, t_global *global)
 {
 	t_color		col;
-	t_obj		*camera;
 	int			i;
+	t_ray		ray;
 	t_viewport	*vp;
 	double		rand;
 
 	i = 0;
-	camera = global->mlx.camera;
-	vp = camera->camera->viewport;
+	vp = global->mlx.camera->camera->viewport;
 	col = col_init(0, 0, 0);
 	ray.origin = global->mlx.camera->pos;
 	while (i < SAMPLES)

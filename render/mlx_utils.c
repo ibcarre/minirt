@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 17:24:54 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 13:36:13 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/08 12:58:33 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	my_mlx_pixel_put(t_data *data, int height, int width, int color)
 int	close_window(t_vars *mlx)
 {
 	mlx_destroy_window(mlx->mlx, mlx->win);
+	mlx_destroy_image(mlx->mlx, mlx->img.img);
 	mlx_destroy_display(mlx->mlx);
 	free(mlx->mlx);
 	free_objs(mlx->first);

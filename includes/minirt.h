@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/07 13:14:37 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/08 12:54:47 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ typedef struct s_vars
 {
 	void	*mlx;
 	void	*win;
+	t_data	img;
 	t_obj	*first;
 	t_obj	*camera;
 	t_obj	*am_light;
@@ -256,7 +257,7 @@ t_obj		*fill_alight(char *line, t_obj **obj);
 t_pos		col_mul2(t_color col, double x);
 t_pos		col_mul_vec(t_color col, t_pos vec);
 t_color		col_div(t_pos col, double x);
-void		ray_color(t_ray ray, t_pos px, t_pos xy, t_global *global);
+void		ray_color(t_pos px, t_pos xy, t_global *global);
 void		shading(t_shading *shader, t_vars mlx, t_hit point);
 t_color		check_lights(t_ray ray, t_vars mlx, t_hit point);
 t_color		check_meshes(t_ray ray, t_vars mlx);

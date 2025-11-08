@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hit_detection.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 17:19:43 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/07 13:09:52 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/08 12:28:34 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_pos	get_normal(t_obj *first, t_hit *point, t_ray ray)
 		normal = vec_normalize(vec_add_vec(t_point, first->pos, MINUS));
 	else if (first->type == PLANE)
 		normal = vec_normalize(first->plane->normal);
-	else if (first->type == CYLINDER)
+	else
 	{
 		if (point->cyl_point.endcap)
 			normal = vec_normalize(first->cylinder->normal);

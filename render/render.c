@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 16:14:36 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 19:10:00 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/08 12:55:24 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //sp 0,-50.5,-100 100 10,0,255
 
 #include "../includes/minirt.h"
+#include <string.h>
 
 void	get_y(t_global *glob, t_pos *xy)
 {
@@ -27,7 +28,6 @@ void	*routine(void *param)
 	t_global	*global;
 	t_pos		xy;
 	t_pos		pixel;
-	t_ray		ray;
 
 	global = (t_global *) param;
 	pthread_mutex_lock(&(global->mutex));
@@ -42,7 +42,7 @@ void	*routine(void *param)
 					vec_mul(global->vp->pixel_delta_u, xy.x), ADD);
 			pixel = vec_add_vec(pixel,
 					vec_mul(global->vp->pixel_delta_v, xy.y), ADD);
-			ray_color(ray, pixel, xy, global);
+			ray_color(pixel, xy, global);
 			xy.x = xy.x + 1;
 		}
 		get_y(global, &xy);
@@ -84,12 +84,13 @@ void	render(t_obj *first)
 	t_vars	mlx;
 	t_data	img;
 
-	mlx.first = first ;
+	mlx.first = first;
 	mlx.mlx = mlx_init();
 	mlx.win = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "blender");
 	img.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
 	img.addr = mlx_get_data_addr(img.img,
 			&img.bits_per_pixel, &img.line_length, &img.endian);
+	mlx.img = img;
 	render_image(mlx, &img);
 	printf("\n");
 	mlx_put_image_to_window(mlx.mlx, mlx.win, img.img, 0, 0);
