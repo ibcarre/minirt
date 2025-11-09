@@ -19,7 +19,7 @@
 # define ADD 1
 # define SAMPLES 5
 # define M_PI 3.14159265358979323846
-# define INTENSITE 150
+# define INTENSITE 100
 # define CORES 8
 
 # include "../minilibx-linux/mlx.h"
