@@ -6,7 +6,7 @@
 /*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 16:27:05 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/08 14:03:02 by ibaaziz          ###   ########.fr       */
+/*   Updated: 2025/11/20 20:58:32 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define SAMPLES 5
 # define M_PI 3.14159265358979323846
 # define INTENSITE 100
-# define CORES 8
+# define CORES 20
 
 # include "../minilibx-linux/mlx.h"
 # include <X11/keysym.h>

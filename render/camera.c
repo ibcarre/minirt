@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibtihal <ibtihal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ibaaziz <ibaaziz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:29:29 by ibtihal           #+#    #+#             */
-/*   Updated: 2025/11/06 15:31:29 by ibtihal          ###   ########.fr       */
+/*   Updated: 2025/11/23 12:52:05 by ibaaziz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_axis	get_local_orientation(t_pos	or)
 	or = vec_normalize(or);
 	print_vec("ORIENTATION ", or);
 	v_up = vec_init(0, 1, 0);
-	if (or.y == 1 && or.y == -1)
+	if (or.y == 1 || or.y == -1)
 	{
 		v_up.z = or.y;
 		v_up.y = 0;
